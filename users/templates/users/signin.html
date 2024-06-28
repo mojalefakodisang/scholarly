@@ -1,0 +1,25 @@
+{% extends 'users/auth_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-lg-5 col-sm-12">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h4 class="card-title">Sign in</h4>
+                        <form method="POST" class="mb-5">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Sign in</button>
+                        </form>
+                        <p class="text-muted">Forgot password? <a href="#">Reset Password</a></p>
+                        <p class="text-muted">Don't have an account? Sign up as a 
+                            <a href="{% url 'st-register' %}">Student</a> or 
+                            <a href="{% url 'contr-register' %}">Contributor</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
