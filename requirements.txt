@@ -1,4 +1,4 @@
-asgiref==3.8.1
+asgiref<=3.8.1
 beautifulsoup4==4.12.3
 black==24.4.2
 click==8.1.7
