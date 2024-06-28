@@ -1,6 +1,6 @@
 asgiref<=3.8.1
 beautifulsoup4==4.12.3
-black==24.4.2
+black<=24.4.2
 click==8.1.7
 Django<=5.0.6
 django-bootstrap4==24.3
