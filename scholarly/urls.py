@@ -28,4 +28,7 @@ urlpatterns = [
     path("login/", LoginView.as_view(template_name="users/signin.html"),
          name="login"),
     path("dashboard/", user_views.dashboard, name='dashboard'),
+    path("reset_request/", user_views.request_reset, name='request_reset'),
+    path("reset_password/<str:username>/<str:token>/",
+         user_views.reset_password, name='reset_password'),
 ]
