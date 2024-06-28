@@ -6,7 +6,7 @@ Django
 django-bootstrap4
 django-crispy-forms
 mypy-extensions
-mysqlclient2
+mysqlclient
 packaging
 pathspec
 platformdirs
