@@ -7,16 +7,24 @@
                 <div class="card mt-5">
                     <div class="card-body">
                         <h4 class="card-title">Sign in</h4>
-                        <form method="POST" class="mb-5">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                    <small>{{ message }}</small>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form method="POST" class="mb-3">
                             {% csrf_token %}
                             {{ form|crispy }}
                             <button type="submit" class="btn btn-primary">Sign in</button>
                         </form>
-                        <p class="text-muted">Forgot password? <a href="{% url 'request_reset' %}">Reset Password</a></p>
-                        <p class="text-muted">Don't have an account? Sign up as a 
+                        <small class="text-muted">Forgot password? <a href="{% url 'request_reset' %}">Reset Password</a></small>
+                        <br />
+                        <small class="text-muted">Don't have an account? Sign up as a 
                             <a href="{% url 'st-register' %}">Student</a> or 
                             <a href="{% url 'contr-register' %}">Contributor</a>
-                        </p>
+                        </small>
                     </div>
                 </div>
             </div>

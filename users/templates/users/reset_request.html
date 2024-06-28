@@ -10,6 +10,13 @@
                 <div class="card mt-5">
                     <div class="card-body">
                         <h4 class="card-title">Request password reset</h4>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                    <small>{{ message }}</small>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <form method="POST" class="mb-5">
                             {% csrf_token %}
                             {{ form|crispy }}

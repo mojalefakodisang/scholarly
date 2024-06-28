@@ -13,3 +13,16 @@ class ResetPassword(forms.ModelForm):
     class Meta:
         model = User
         fields = ['password', 'confirm_password']
+
+
+class LoginForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].help_text = ""
+        self.fields['password'].help_text = ""
