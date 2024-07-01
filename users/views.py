@@ -3,6 +3,8 @@ from .models import User
 from student.models import Student
 from django.contrib import messages
 from django.contrib.auth import logout
+from review.models import Review
+from content.models import Content
 from contributor.models import Contributor
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
@@ -43,11 +45,21 @@ def logout_user(request):
     
 @login_required
 def dashboard(request):
-    role = request.user.role
+    tasks = []
+    empty_ = ['', None]
+    if request.user.first_name in empty_ or request.user.last_name in empty_:
+        tasks.append('Update your profile')
+
+    review = Review.objects.filter(student=request.user).first() # fix to filter only students
+    content = Content.objects.filter(user=request.user) # fix to filter only contributors
     context = {
-        'role': role,
-        'user': request.user
+        'title': 'Dashboard',
+        'user': request.user,
+        'content': content,
+        'review': review,
+        'tasks': tasks
     }
+    print(Student.objects.filter(user=request.user).first().__dict__)
     return render(request, 'users/dashboard.html', context=context)
 
 def request_reset(request):

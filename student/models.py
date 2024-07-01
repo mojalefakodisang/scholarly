@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 from users.models import User
 from django.dispatch import receiver
@@ -30,3 +31,16 @@ def create_user_profile(sender, instance, created, **kwargs):
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     student_id = models.IntegerField(null=True, blank=True)
+    image = models.ImageField(default='default.jpg', upload_to='stud_pics')
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self, self.image.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)

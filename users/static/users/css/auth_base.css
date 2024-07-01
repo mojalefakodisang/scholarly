@@ -1,3 +1,41 @@
-body {
-    background-color: #529de8;
+main {
+    width: 100vw;
+    height: 100vh;
+}
+
+.main-window {
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.main-window::-webkit-scrollbar {
+    display: none;
+}
+
+.logo {
+    width: 90%;
+    border: 1px solid black;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+    border: 1px solid black;
+}
+
+.nav {
+    border: 1px solid black;
+}
+
+.icon:hover {
+    scale: 0.9;
+    background-color: #000020;
+    transition: 0.5ms ease-in-out;
+}
+
+@media only screen and (max-width: 768px) {
+    .main {
+        margin-top: 10px;
+    }
 }
