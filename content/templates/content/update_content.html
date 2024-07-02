@@ -1,0 +1,39 @@
+{% extends 'users/main.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
+        <div class="row mb-5">
+            <div class="col-10">
+                <h4>Update content</h4>
+            </div>
+            <div class="col-2">
+                {% if user.role == 'CONTRIBUTOR' %}
+                    <h4 class="badge bg-dark text-light p-2">Contributor</h4>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">What makes a content?</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Content</h6>
+                        <div class="content">
+                            <form method="POST" class="mb-3">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

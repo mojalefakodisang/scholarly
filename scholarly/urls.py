@@ -18,6 +18,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from users import views as user_views
+from content import views as content_views
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 
@@ -31,6 +32,8 @@ urlpatterns = [
     path("reset_request/", user_views.request_reset, name='request_reset'),
     path("reset_password/<str:username>/<str:token>/",
          user_views.reset_password, name='reset_password'),
+    path("content/", include("content.urls")),
+    path("explore/", content_views.explore, name="explore"),
 ]
 
 if settings.DEBUG:

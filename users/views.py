@@ -57,6 +57,12 @@ def dashboard(request):
 
     review = Review.objects.filter(student=request.user).first() # fix to filter only students
     content = Content.objects.filter(user=request.user) # fix to filter only contributors
+
+    print(request.path)
+
+    if len(content) == 0:
+        content = None
+
     context = {
         'title': 'Dashboard',
         'profile': profile,

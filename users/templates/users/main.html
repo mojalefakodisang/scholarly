@@ -1,0 +1,109 @@
+{% extends 'users/auth_base.html' %}
+{% block content %}
+    <div class="row main-window">
+        <div class="d-sm-block d-md-block d-lg-block border bg-tertiary">
+            <!-- Navigation bar -->
+            <nav class="navbar d-lg-none d-md-block d-none d-sm-block navbar-expand-md navbar-dark bg-light border-bottom fixed-top mb-5">
+                <div class="container">
+                    <a class="navbar-brand mr-4 text-dark text-dark" href="#">
+                        <h2>Scholarly</h2>
+                    </a>
+                    <button class="navbar-toggler bg-dark" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="material-symbols-outlined">
+                            menu
+                        </span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarToggle">
+                        <a class="nav-item nav-link text-dark d-sm-flex" href="{% url 'explore' %}">
+                            <span class="material-symbols-outlined">
+                                explore
+                            </span>
+                            <p>Explore</p>
+                        </a>
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-item nav-link btn btn-link text-dark d-sm-flex">
+                                <span class="material-symbols-outlined">
+                                    logout
+                                </span>
+                                <p>Logout</p>
+                            </button>
+                        </form>
+                        <a class="nav-item nav-link text-dark d-flex" href="#">
+                            <div class="profile-container d-flex justify-content-center align-items-center">
+                                <a href="#" class="d-sm-block">
+                                    <img src="{{ profile.image.url }}" alt="profile-picture" class="rounded-circle" width="30px">
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <nav class="nav d-lg-block d-md-none d-sm-none d-none sidebar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <a class="navbar-brand text-dark" href="{% url 'explore' %}">
+                                <h1 class="logo">S</h1>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navigation pe-2">
+                        <ul class="nav navbar">
+                            <li class="nav-item d-lg-block">
+                                {% if request.path == '/explore/' %}
+                                    <a class="nav-link p-0 text-dark" href="{% url 'dashboard' %}">
+                                        <div class="icon">
+                                            <span class="material-symbols-outlined">
+                                                grid_view
+                                            </span>
+                                        </div>
+                                    </a>
+                                {% elif request.path == '/dashboard/' %}
+                                    <a class="nav-link p-0 text-dark" href="{% url 'explore' %}">
+                                        <div class="icon">
+                                            <span class="material-symbols-outlined">
+                                                explore
+                                            </span>
+                                        </div>
+                                    </a>
+                                {% elif request.path == '/profile/' %}
+                                    <a class="nav-link p-0 text-dark" href="{% url 'dashboard' %}">
+                                        <div class="icon">
+                                            <div class="icon">
+                                                <span class="material-symbols-outlined">
+                                                    grid_view
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            </li>
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="#">
+                                    <div class="icon"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="{% url 'logout' %}">
+                                    <div class="icon">
+                                        <span class="material-symbols-outlined">
+                                            logout
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="profile-container d-flex justify-content-center align-items-center">
+                        <a href="#">
+                            <img src="{{ profile.image.url }}" alt="profile-picture" class="rounded-circle" width="30px">
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
+            {% block main %}{% endblock main %}
+        </div>
+{% endblock content %}

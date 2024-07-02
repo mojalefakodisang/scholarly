@@ -1,4 +1,4 @@
-{% extends 'users/auth_base.html' %}
+{% extends 'users/main.html' %}
 {% block title %}
     {% if title %}
         <title>{{ title }} | {{ user }}</title>
@@ -6,165 +6,127 @@
         <title>Scholarly | Dashboard</title>
     {% endif %}
 {% endblock title %}
-{% block content %}
-    <div class="row m-0 main-window">
-        <div class="col-lg-1 d-sm-block d-md-block d-lg-block border bg-tertiary">
-            <!-- Navigation bar -->
-            <nav class="navbar d-lg-none d-md-block d-none d-sm-block navbar-expand-md navbar-dark bg-info fixed-top mb-5">
-                <div class="container">
-                    <a class="navbar-brand mr-4 text-dark text-dark" href="#">Scholarly</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarToggle">
-                        <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link text-dark" href="#">Home</a>
-                        <a class="nav-item nav-link text-dark" href="#">About</a>
-                    </div>
-                    <!-- Navbar Right Side -->
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link text-dark" href="#">Profile</a>
-                        <form method="POST" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-item nav-link btn btn-link text-dark">Logout</button>
-                        </form>
-                    </div>
-                </div>
-            </nav>
-            <nav class="nav d-lg-block d-md-none d-sm-none d-none justify-content-center align-items-center">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-center align-items-center">
-                            <a class="navbar-brand text-dark" href="#">
-                                <h1 class="logo">S</h1>
-                            </a>
+{% block main %}
+    <div class="col-lg-11 col-md-12 col-sm-12 container main">
+        <div class="row mb-5">
+            <div class="col-12 mb-2">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                            <small>{{ message }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-10">
+                <h4>Dashboard</h4>
+            </div>
+            <div class="col-2">
+                {% if user.role == 'STUDENT' %}
+                    <h4 class="badge bg-warning text-light p-2">Student</h4>
+                {% else %}
+                    <h4 class="badge bg-dark text-light p-2">Contributor</h4>
+                {% endif %}
+            </div>
+        </div>
+        {% if user.role == 'CONTRIBUTOR' %}
+        <!-- Contributor cards -->
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 mb-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Notifications</h5>
+                            <div class="content">
+                                {% if notifications is not None %}
+                                    {% for c in notifications %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                {{ c }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-muted text-center">
+                                        <h6>You have no notifications</h6>
+                                        <p>If you have any notifications, they will appear here</p>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div class="navigation">
-                        <ul class="nav navbar sidebar">
-                            <li class="nav-item d-lg-block">
-                                <a class="nav-link p-0 text-dark" href="#">
-                                    <div class="icon"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item d-lg-block">
-                                <a class="nav-link p-0 text-dark" href="#">
-                                    <div class="icon"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item d-lg-block">
-                                <a class="nav-link p-0 text-dark" href="#">
-                                    <div class="icon"></div>
-                                </a>
-                            </li>
-                            <li class="nav-item d-lg-block">
-                                <a class="nav-link p-0 text-dark" href="{% url 'logout' %}">
-                                    <div class="icon"></div>
-                                </a>
-                            </li>
-                        </ul>
+                </div>
+                <div class="col-lg-6 col-sm-12 mb-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Tasks</h5>
+                            <div class="content">
+                                {% if tasks is not None %}
+                                    {% for c in tasks %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                {{ c }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-muted text-center">
+                                        <h6>You have no tasks</h6>
+                                        <p>If you have any tasks, they will appear here</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <a href="#" class="profile-container mt-5">
-                        <img src="{{ profile.image.url }}" alt="profile-picture" class="rounded-circle" width="30px">
-                    </a>
-                </div>
-            </nav>
-        </div>
-        <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
-            <div class="row mb-5">
-                <div class="col-10">
-                    <h4>Dashboard</h4>
-                </div>
-                <div class="col-2">
-                    {% if user.role == 'STUDENT' %}
-                        <h4 class="badge bg-warning text-light p-2">Student</h4>
-                    {% else %}
-                        <h4 class="badge bg-dark text-light p-2">Contributor</h4>
-                    {% endif %}
                 </div>
             </div>
-            {% if user.role == 'CONTRIBUTOR' %}
-            <!-- Contributor cards -->
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-sm-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Notifications</h5>
-                                <div class="content">
-                                    {% if notifications is not None %}
-                                        {% for c in notifications %}
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    {{ c }}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    {% else %}
-                                        <div class="text-muted text-center">
-                                            <h6>You have no notifications</h6>
-                                            <p>If you have any notifications, they will appear here</p>
-                                        </div>
-                                    {% endif %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h5 class="card-title mb-3">Content</h5>
+                                </div>
+                                <div class="col-2">
+                                    <a href="#" class="btn btn-sm btn-outline-info">Show all</a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-sm-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Tasks</h5>
-                                <div class="content">
-                                    {% if tasks is not None %}
-                                        {% for c in tasks %}
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    {{ c }}
+                            <div class="content">
+                                {% if content is not None %}
+                                    {% for c in content %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-11">
+                                                        {{ c.title }}
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
-                                        {% endfor %}
-                                    {% else %}
-                                        <div class="text-muted text-center">
-                                            <h6>You have no tasks</h6>
-                                            <p>If you have any tasks, they will appear here</p>
                                         </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title mb-5">Content</h5>
-                                <div class="content">
-                                    {% if content is not None %}
-                                        {% for c in content %}
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    {{ c.description }}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    {% elif not  bordercontent %}
-                                        <div class="text-center text-muted mb-5">
-                                            <h6 class="display-4">Nothing to show here.</h6>
-                                            <p class="text-muted">By clicking 'Add content' below, you will be creating new content for your audience</p>
-                                            <p class="text-muted">When you have successfully created content, your content will appear in this card</p>
-                                        </div>
-                                    {% endif %}
-                                    <div class="card-bottom text-center">
-                                        <a href="#" class="btn bg-info text-light border">Add content</a>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center text-muted mb-5">
+                                        <h6 class="display-4">Nothing to show here.</h6>
+                                        <p class="text-muted">By clicking 'Add content' below, you will be creating new content for your audience</p>
+                                        <p class="text-muted">When you have successfully created content, your content will appear in this card</p>
                                     </div>
+                                {% endif %}
+                                <div class="text-center">
+                                    <a href="{% url 'create-content' %}" class="text-dark add-btn">
+                                        <span class="material-symbols-outlined">
+                                            add_circle
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% else %}
-            <!-- Student cards -->
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+        <!-- Student cards -->
+        {% endif %}
     </div>
-{% endblock content %}
+</div>
+{% endblock main %}
