@@ -1,15 +1,16 @@
-main {
-    width: 100vw;
-    height: 100vh;
+.main-window::-webkit-scrollbar, .sidebar::-webkit-scrollbar,
+.main::-webkit-scrollbar, main::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .main-window {
     height: 100vh;
-    overflow-y: scroll;
+    width: 100vw;
 }
 
-.main-window::-webkit-scrollbar {
-    display: none;
+.main {
+    overflow-y: scroll;
 }
 
 .logo {
@@ -20,12 +21,29 @@ main {
 .icon {
     width: 30px;
     height: 30px;
-    margin-bottom: 5px;
     border: 1px solid black;
 }
 
-.nav {
-    border: 1px solid black;
+body, main {
+    height: 100vh;
+    width: 100vw;
+    max-width: 1960px;
+}
+
+.sidebar {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.navigation {
+    height: 80vh;
+    width: 150%;
+    overflow-y: scroll;
+}
+
+.navigation::-webkit-scrollbar {
+    display: none;
 }
 
 .icon:hover {
@@ -34,8 +52,12 @@ main {
     transition: 0.5ms ease-in-out;
 }
 
-@media only screen and (max-width: 768px) {
-    .main {
-        margin-top: 10px;
-    }
+.profile-container:hover {
+    scale: 0.9;
+    transition: 0.5ms ease-in-out;
+}
+
+.profile-container {
+    height: 20vh;
+    width: 100vw;
 }

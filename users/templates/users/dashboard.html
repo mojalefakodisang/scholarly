@@ -8,7 +8,7 @@
 {% endblock title %}
 {% block content %}
     <div class="row m-0 main-window">
-        <div class="col-lg-1 d-sm-block d-md-block d-lg-block border bg-info">
+        <div class="col-lg-1 d-sm-block d-md-block d-lg-block border bg-tertiary">
             <!-- Navigation bar -->
             <nav class="navbar d-lg-none d-md-block d-none d-sm-block navbar-expand-md navbar-dark bg-info fixed-top mb-5">
                 <div class="container">
@@ -31,9 +31,42 @@
                     </div>
                 </div>
             </nav>
-            <nav class="navbar d-lg-block d-md-none d-sm-none">
+            <nav class="nav d-lg-block d-md-none d-sm-none d-none justify-content-center align-items-center">
                 <div class="container">
-                    <img src="{{ user.image }}" alt="profile-picture">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+                            <a class="navbar-brand text-dark" href="#">
+                                <h1 class="logo">S</h1>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <ul class="nav navbar sidebar">
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="#">
+                                    <div class="icon"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="#">
+                                    <div class="icon"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="#">
+                                    <div class="icon"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item d-lg-block">
+                                <a class="nav-link p-0 text-dark" href="{% url 'logout' %}">
+                                    <div class="icon"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#" class="profile-container mt-5">
+                        <img src="{{ profile.image.url }}" alt="profile-picture" class="rounded-circle" width="30px">
+                    </a>
                 </div>
             </nav>
         </div>

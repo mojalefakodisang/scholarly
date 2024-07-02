@@ -1,11 +1,9 @@
 import uuid
 from .models import User
-from student.models import Student
 from django.contrib import messages
 from django.contrib.auth import logout
 from review.models import Review
 from content.models import Content
-from contributor.models import Contributor
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
 from django.core.exceptions import ValidationError
@@ -13,6 +11,8 @@ from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import RequestResetForm, ResetPassword, LoginForm
+from student.models import Student, StudentProfile
+from contributor.models import Contributor, ContributorProfile
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
@@ -50,16 +50,22 @@ def dashboard(request):
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
 
+    if request.user.role == 'STUDENT':
+        profile = StudentProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'CONTRIBUTOR':
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+
     review = Review.objects.filter(student=request.user).first() # fix to filter only students
     content = Content.objects.filter(user=request.user) # fix to filter only contributors
     context = {
         'title': 'Dashboard',
+        'profile': profile,
         'user': request.user,
         'content': content,
         'review': review,
         'tasks': tasks
     }
-    print(Student.objects.filter(user=request.user).first().__dict__)
+
     return render(request, 'users/dashboard.html', context=context)
 
 def request_reset(request):
