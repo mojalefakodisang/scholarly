@@ -40,7 +40,12 @@ class ContributorProfile(models.Model):
             img.save(self.image.path)
 
 
-@receiver(post_save, sender=Contributor)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == "CONTRIBUTOR":
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == User.Role.CONTRIBUTOR:
         ContributorProfile.objects.create(user=instance)
+    else:
+        try:
+            instance.contributorprofile.save()
+        except User.contributorprofile.RelatedObjectDoesNotExist:
+            ContributorProfile.objects.create(user=instance)

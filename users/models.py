@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
@@ -17,4 +18,14 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.role = self.base_role
-            return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+    @property
+    def studentprofile(self):
+        StudentProfile = apps.get_model('student', 'StudentProfile')
+        return StudentProfile.objects.get(user=self)
+
+    @property
+    def contributorprofile(self):
+        ContributorProfile = apps.get_model('contributor', 'ContributorProfile')
+        return ContributorProfile.objects.get(user=self)

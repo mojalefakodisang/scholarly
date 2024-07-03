@@ -22,10 +22,15 @@ class Student(User):
         proxy = True
 
 
-@receiver(post_save, sender=Student)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == "STUDENT":
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created and instance.role == User.Role.STUDENT:
         StudentProfile.objects.create(user=instance)
+    else:
+        try:
+            instance.studentprofile.save()
+        except User.studentprofile.RelatedObjectDoesNotExist:
+            StudentProfile.objects.create(user=instance)
 
 
 class StudentProfile(models.Model):

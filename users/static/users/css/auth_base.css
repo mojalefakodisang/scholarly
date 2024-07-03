@@ -43,9 +43,8 @@ body::-webkit-scrollbar {
 }
 
 .icon {
-    width: 50px;
-    height: 50px;
-    border: 1px solid;
+    width: 60px;
+    height: 60px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -104,8 +103,15 @@ main {
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
-    'GRAD' 0,
-    'opsz' 40
+    'GRAD' 500,
+    'opsz' 0;
+    font-size: 40px;
+}
+
+.icon:hover .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 100;
+    font-size: 40px;
 }
 
 .add-btn a p {
@@ -114,6 +120,16 @@ main {
 
 .add-btn-animate {
     transition: transit-up inherit ease-in-out;
+}
+
+.update-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes transit-up {

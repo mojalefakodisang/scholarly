@@ -67,14 +67,12 @@
                                             </span>
                                         </div>
                                     </a>
-                                {% elif request.path == '/profile/' %}
+                                {% elif request.path == '/u/{{ user }}/update' %}
                                     <a class="nav-link p-0 text-dark" href="{% url 'dashboard' %}">
                                         <div class="icon">
-                                            <div class="icon">
-                                                <span class="material-symbols-outlined">
-                                                    grid_view
-                                                </span>
-                                            </div>
+                                            <span class="material-symbols-outlined">
+                                                grid_view
+                                            </span>
                                         </div>
                                     </a>
                                 {% endif %}
@@ -96,7 +94,7 @@
                         </ul>
                     </div>
                     <div class="profile-container d-flex justify-content-center align-items-center">
-                        <a href="#">
+                        <a href="{% url 'update-user' username=user.username %}">
                             <img src="{{ profile.image.url }}" alt="profile-picture" class="rounded-circle" width="30px">
                         </a>
                     </div>

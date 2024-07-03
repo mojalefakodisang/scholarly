@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
+    path("u/", include("users.urls")),
     path("admin/", admin.site.urls),
     path("student/", include("student.urls")),
     path("contributor/", include("contributor.urls")),

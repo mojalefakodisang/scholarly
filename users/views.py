@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .forms import RequestResetForm, ResetPassword, LoginForm
+from .forms import RequestResetForm, ResetPassword, LoginForm, UserUpdateForm
 from student.models import Student, StudentProfile
 from contributor.models import Contributor, ContributorProfile
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -46,6 +46,7 @@ def logout_user(request):
 @login_required
 def dashboard(request):
     tasks = []
+    notifications = []
     empty_ = ['', None]
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
@@ -62,6 +63,10 @@ def dashboard(request):
 
     if len(content) == 0:
         content = None
+    if len(tasks) == 0:
+        tasks = None
+    if len(notifications) == 0:
+        notifications = None
 
     context = {
         'title': 'Dashboard',
@@ -69,7 +74,8 @@ def dashboard(request):
         'user': request.user,
         'content': content,
         'review': review,
-        'tasks': tasks
+        'tasks': tasks,
+        'notifications': notifications
     }
 
     return render(request, 'users/dashboard.html', context=context)
@@ -140,3 +146,30 @@ def reset_password(request, username, token):
     }
 
     return render(request, 'users/reset_password.html', context=context)
+
+@login_required
+def update_user(request, username):
+    user = User.objects.get(username=username)
+
+    if request.user == user and user.role == 'STUDENT':
+        profile = StudentProfile()
+    else:
+        profile = ContributorProfile()
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST)
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.save()
+            messages.success(request, 'User information updated successfully')
+            return redirect('dashboard')
+    else:
+        form = UserUpdateForm(instance=user)
+
+    context = {
+        'form': form,
+        'profile': profile
+    }
+    return render(request, 'users/update_user.html', context=context)
