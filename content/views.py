@@ -1,4 +1,5 @@
 from .models import Content
+from review.models import Review
 from django.contrib import messages
 from student.models import StudentProfile
 from django.shortcuts import render, redirect
@@ -64,6 +65,7 @@ def explore(request):
 def content_view(request, content_id):
     content = Content.objects.filter(id=content_id).first()
     contributors = ContributorProfile.objects.all()
+    reviews = Review.objects.filter(content=content).all()
 
     if content is None:
         messages.warning(request, 'Content not found')
@@ -77,7 +79,8 @@ def content_view(request, content_id):
     context = {
         'contributors': contributors,
         'content': content,
-        'profile': profile
+        'profile': profile,
+        'reviews': reviews
     }
 
     return render(request, 'content/content_view.html', context=context)

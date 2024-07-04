@@ -1,0 +1,101 @@
+{% extends 'users/main.html' %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <div class="container p-5 main">
+        <div class="row mb-5">
+            <div class="col-12 mb-2">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                            <small>{{ message }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-8 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row border-bottom mb-2 d-flex justify-content-center align-items-center pb-3">
+                                <div class="col-lg-2 col-sm-6">
+                                    <img src="{{ profile.image.url }}" alt="" class="rounded-circle" width="60px">
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center col-lg-6 col-sm-6 ms-0 mb-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            {% if review.student.first_name != '' %}
+                                                <h4 class="card-title mb-0">{{ review.student.first_name }} {{ review.student.last_name }}</h6>
+                                            {% else %}
+                                                <h4 class="card-title mb-0">{{ review.student.username }}</h6>
+                                            {% endif %}
+                                        <div class="col-12">
+                                            <small class="text-muted">{{ review.student.email }}</small>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    {% if user == review.student %}
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <a href="{% url 'update-review' review_id=review.id content_id=review.content.id %}" class="btn btn-sm btn-outline-dark">Update</a>
+                                            </div>
+                                            <div class="col-6">
+                                                <a href="{% url 'delete-review' review_id=review.id content_id=review.content.id %}" class="btn btn-sm btn-outline-dark">Delete</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-9 mt-3 mb-3">
+                                    <div class="row me-auto">
+                                        <div class="col-12">
+                                            {% if review.rating == 1 %}
+                                                <span class="material-symbols-outlined filled">star</span>
+                                            {% elif review.rating == 2 %}
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                            {% elif review.rating == 3 %}
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                            {% elif review.rating == 4 %}
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                            {% elif review.rating == 5 %}
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                                <span class="material-symbols-outlined filled">star</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-10">
+                                            <small class="text-muted">{{ review.created_at }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="text-muted"></h5>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="container">
+                                    <p>{{ review.review_content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

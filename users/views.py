@@ -45,6 +45,7 @@ def logout_user(request):
     
 @login_required
 def dashboard(request):
+    count = 0
     tasks = []
     notifications = []
     empty_ = ['', None]
@@ -56,8 +57,15 @@ def dashboard(request):
     elif request.user.role == 'CONTRIBUTOR':
         profile = ContributorProfile.objects.filter(user=request.user).first()
 
+    reviews = Review.objects.all()
     review = Review.objects.filter(student=request.user).first() # fix to filter only students
     content = Content.objects.filter(user=request.user) # fix to filter only contributors
+
+    for con in content:
+        for rev in reviews:
+            if rev.content == con:
+                count += 1
+        notifications.append(f'You have {count} reviews for {con.title}')
 
     print(request.path)
 

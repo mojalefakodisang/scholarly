@@ -23,18 +23,19 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    path("u/", include("users.urls")),
     path("admin/", admin.site.urls),
+    path("u/", include("users.urls")),
+    path("review/", include("review.urls")),
+    path("content/", include("content.urls")),
     path("student/", include("student.urls")),
     path("contributor/", include("contributor.urls")),
     path("login/", user_views.login_view, name="login"),
+    path("explore/", content_views.explore, name="explore"),
     path("logout/", user_views.logout_user, name="logout"),
     path("dashboard/", user_views.dashboard, name='dashboard'),
     path("reset_request/", user_views.request_reset, name='request_reset'),
     path("reset_password/<str:username>/<str:token>/",
          user_views.reset_password, name='reset_password'),
-    path("content/", include("content.urls")),
-    path("explore/", content_views.explore, name="explore"),
 ]
 
 if settings.DEBUG:

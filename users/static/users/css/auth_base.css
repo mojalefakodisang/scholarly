@@ -105,16 +105,32 @@ main {
     'wght' 400,
     'GRAD' 500,
     'opsz' 0;
+    font-size: 30px;
+}
+
+.filled .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 100,
+    'wght' 500;
+    font-size: 10px;
+}
+
+.card-buttons .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.icon .material-symbols-outlined {
     font-size: 40px;
 }
 
 .icon:hover .material-symbols-outlined {
     font-variation-settings:
     'FILL' 100;
-    font-size: 40px;
 }
 
-.add-btn a p {
+
+.add-btn a p,
+.add-review-btn a p {
     text-decoration: none;
 }
 

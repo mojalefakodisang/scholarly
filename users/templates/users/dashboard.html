@@ -39,9 +39,14 @@
                             <div class="content">
                                 {% if notifications is not None %}
                                     {% for c in notifications %}
-                                        <div class="card mb-3">
-                                            <div class="card-body">
-                                                {{ c }}
+                                        <div class="card mb-1 p-0">
+                                            <div class="card-body p-0" style="overflow-x: hidden;">
+                                                <div class="row d-flex">
+                                                    <div class="col-1"></div>
+                                                    <div class="col-10">
+                                                        <small>{{ c }}</small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -100,7 +105,9 @@
                                                     <div class="col-11">
                                                         {{ c.title }}
                                                     </div>
-                                                    
+                                                    <div class="col-1">
+                                                        <a class="btn btn-sm btn-outline-dark" href="{% url 'content-view' content_id=c.id %}">View</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
