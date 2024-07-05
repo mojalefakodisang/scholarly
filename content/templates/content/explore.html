@@ -56,11 +56,29 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-8">
+                                    <div class="col-8 d-flex justify-content-start">
                                         {% if user.role == 'STUDENT' %}
-                                            <span class="material-symbols-outlined">
-                                                bookmark
-                                            </span>
+                                            {% if saved is None %}
+                                                <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                    <span class="material-symbols-outlined">
+                                                        bookmark
+                                                    </span>
+                                                </a>
+                                            {% elif saved.content == content %}
+                                                <a class="text-dark" href="{% url 'content-unsave' saved_id=saved.id content_id=content.id %}">
+                                                    <div class="filled">
+                                                        <span class="material-symbols-outlined">
+                                                            bookmark
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            {% else %}
+                                                <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                    <span class="material-symbols-outlined">
+                                                        bookmark
+                                                    </span>
+                                                </a>
+                                            {% endif %}
                                             <span class="material-symbols-outlined">
                                                 add_comment
                                             </span>

@@ -133,6 +133,99 @@
             </div>
         {% else %}
         <!-- Student cards -->
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 mb-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Notifications</h5>
+                            <div class="content">
+                                {% if notifications is not None %}
+                                    {% for c in notifications %}
+                                        <div class="card mb-1 p-0">
+                                            <div class="card-body p-0" style="overflow-x: hidden;">
+                                                <div class="row d-flex">
+                                                    <div class="col-1"></div>
+                                                    <div class="col-10">
+                                                        <small>{{ c }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-muted text-center">
+                                        <h6>You have no notifications</h6>
+                                        <p>If you have any notifications, they will appear here</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12 mb-sm-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Tasks</h5>
+                            <div class="content">
+                                {% if tasks is not None %}
+                                    {% for c in tasks %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                {{ c }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-muted text-center">
+                                        <h6>You have no tasks</h6>
+                                        <p>If you have any tasks, they will appear here</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h5 class="card-title mb-3">Saved Content</h5>
+                                </div>
+                                <div class="col-2 mb-3">
+                                    <a href="#" class="btn btn-sm btn-outline-dark">Show all</a>
+                                </div>
+                            </div>
+                            <div class="content">
+                                {% if saved is not None %}
+                                    {% for c in saved %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-11">
+                                                        {{ c.content.title }}
+                                                    </div>
+                                                    <div class="col-1">
+                                                        <a class="btn btn-sm btn-outline-dark" href="{% url 'content-view' content_id=c.content.id %}">View</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center text-muted mb-5">
+                                        <h6 class="display-4">Nothing to show here.</h6>
+                                        <p class="text-muted">Go to <a href="{% url 'explore' %}" class="text-dark">Explore</a> to browse through content posted</p>
+                                        <p class="text-muted">When you have successfully saved content, they will appear in this card</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
 </div>

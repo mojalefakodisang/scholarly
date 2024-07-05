@@ -52,11 +52,27 @@
                                         <div class="row">
                                                 <div class="col-12 d-flex justify-content-center align-items-center ">
                                                     {% if user.role == 'STUDENT' %}
-                                                        <div class="d-flex justify-content-center align-items-center col-6">
-                                                            <span class="material-symbols-outlined">
-                                                                bookmark
-                                                            </span>
-                                                        </div>
+                                                        {% if saved is None %}
+                                                            <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                                <span class="material-symbols-outlined">
+                                                                    bookmark
+                                                                </span>
+                                                            </a>
+                                                        {% elif saved.content == content %}
+                                                            <a class="text-dark" href="{% url 'content-unsave' saved_id=saved.id content_id=content.id %}">
+                                                                <div class="filled">
+                                                                    <span class="material-symbols-outlined">
+                                                                        bookmark
+                                                                    </span>
+                                                                </div>
+                                                            </a>
+                                                        {% else %}
+                                                            <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                                <span class="material-symbols-outlined">
+                                                                    bookmark
+                                                                </span>
+                                                            </a>
+                                                        {% endif %}
                                                         <a href="{% url 'create-review' content_id=content.id %}" class="nav-link text-dark">
                                                             <div class="d-flex justify-content-center align-items-center col-6">
                                                                 <span class="material-symbols-outlined">

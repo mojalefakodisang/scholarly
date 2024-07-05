@@ -3,9 +3,9 @@ from .models import User
 from django.contrib import messages
 from django.contrib.auth import logout
 from review.models import Review
-from content.models import Content
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
+from content.models import Content, SavedContent
 from django.core.exceptions import ValidationError
 from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
@@ -60,12 +60,18 @@ def dashboard(request):
     reviews = Review.objects.all()
     review = Review.objects.filter(student=request.user).first() # fix to filter only students
     content = Content.objects.filter(user=request.user) # fix to filter only contributors
+    saved = SavedContent.objects.filter(student_id=request.user.id)
 
     for con in content:
         for rev in reviews:
             if rev.content == con:
                 count += 1
-        notifications.append(f'You have {count} reviews for {con.title}')
+        if count == 0:
+            notifications = None
+        else:
+            notifications.append(f'You have {count} reviews for {con.title}')
+
+
 
     print(request.path)
 
@@ -73,8 +79,6 @@ def dashboard(request):
         content = None
     if len(tasks) == 0:
         tasks = None
-    if len(notifications) == 0:
-        notifications = None
 
     context = {
         'title': 'Dashboard',
@@ -83,7 +87,8 @@ def dashboard(request):
         'content': content,
         'review': review,
         'tasks': tasks,
-        'notifications': notifications
+        'notifications': notifications,
+        'saved': saved
     }
 
     return render(request, 'users/dashboard.html', context=context)
