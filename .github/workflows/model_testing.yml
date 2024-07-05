@@ -37,7 +37,6 @@ jobs:
             if [ -d "scholarly" ]; then
               cd scholarly
               git pull origin main
-              cd scholarly
               python -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
