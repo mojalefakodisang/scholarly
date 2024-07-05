@@ -40,4 +40,8 @@ jobs:
             else
               git clone https://github.com/mojalefakodisang/scholarly
               cd scholarly
+              python -m venv venv
+              source venv/bin/activate
+              pip install -r requirements.txt
+              python manage.py test || { echo "Tests failed"; cd ..; rm -rf scholarly; exit 1; }
             fi
