@@ -38,6 +38,6 @@ jobs:
               cd scholarly
               git pull origin main
             else
-              git clone origin main
+              git clone https://github.com/mojalefakodisang/scholarly
               cd scholarly
             fi
