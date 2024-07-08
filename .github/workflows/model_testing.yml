@@ -42,10 +42,35 @@ jobs:
         run: |
           python manage.py test
 
-      - name: Deploy to VM
+      - name: Deploy to web_server_01
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.VM_HOST }}
+          host: ${{ secrets.VM_HOST_1 }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            if [ -d "scholarly" ]; then
+              cd scholarly
+              git pull origin main
+              sudo apt-get install -y python3-pip
+              python3 -m venv venv
+              source venv/bin/activate
+              pip install -r requirements.txt
+              systemctl restart scholarly.service
+            else
+              git clone https://github.com/mojalefakodisang/scholarly
+              cd scholarly
+              sudo apt-get install -y python3-pip
+              python3 -m venv venv
+              source venv/bin/activate
+              pip install -r requirements.txt
+              systemctl restart scholarly.service
+            fi
+
+      - name: Deploy to web_server_02
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VM_HOST_2 }}
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
