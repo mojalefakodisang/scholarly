@@ -5,7 +5,7 @@ from student.models import Student
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, default='Other')
 
     def __str__(self):
         return f'Category: {self.name}'
@@ -18,9 +18,13 @@ class Content(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(Contributor, on_delete=models.CASCADE, related_name='contents')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='contents', default=None)
+    approved = models.CharField(max_length=20, choices=[('Approved', 'Approved'),
+                                                        ('Not Approved', 'Not Approved'),
+                                                        ('Pending', 'Pending')],
+                                                        default='Pending')
 
     def __str__(self):
-        return f"Content: {self.user} - {self.description}"
+        return f"Content: {self.user} - {self.description} - {self.status}"
 
 
 class SavedContent(models.Model):

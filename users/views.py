@@ -11,8 +11,9 @@ from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import RequestResetForm, ResetPassword, LoginForm, UserUpdateForm
-from student.models import Student, StudentProfile
-from contributor.models import Contributor, ContributorProfile
+from student.models import StudentProfile
+from moderator.models import ModeratorProfile
+from contributor.models import ContributorProfile
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
@@ -33,6 +34,7 @@ def login_view(request):
         form = LoginForm()
 
     context = {
+        'title': 'Scholarly | Login',
         'form': form
     }
     return render(request, 'users/signin.html', context=context)
@@ -56,11 +58,13 @@ def dashboard(request):
         profile = StudentProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'CONTRIBUTOR':
         profile = ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     reviews = Review.objects.all()
     review = Review.objects.filter(student=request.user).first() # fix to filter only students
     content = Content.objects.filter(user=request.user) # fix to filter only contributors
-    saved = SavedContent.objects.filter(student_id=request.user.id)
+    saved = SavedContent.objects.filter(student_id=request.user.id).first()
 
     for con in content:
         for rev in reviews:
@@ -70,10 +74,6 @@ def dashboard(request):
             notifications = None
         else:
             notifications.append(f'You have {count} reviews for {con.title}')
-
-
-
-    print(request.path)
 
     if len(content) == 0:
         content = None
@@ -88,7 +88,8 @@ def dashboard(request):
         'review': review,
         'tasks': tasks,
         'notifications': notifications,
-        'saved': saved
+        'saved': saved,
+        'latest_content': content[0] if content != None else None
     }
 
     return render(request, 'users/dashboard.html', context=context)
@@ -166,8 +167,10 @@ def update_user(request, username):
 
     if request.user == user and user.role == 'STUDENT':
         profile = StudentProfile()
-    else:
+    elif request.user == user and user.role == 'CONTRIBUTOR':
         profile = ContributorProfile()
+    elif request.user == user and user.role == 'MODERATOR':
+        profile = ModeratorProfile()
 
     if request.method == 'POST':
         form = UserUpdateForm(request.POST)

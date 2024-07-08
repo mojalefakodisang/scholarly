@@ -1,6 +1,6 @@
 $(".add-btn").hover(function() {
     $(this).append("<p>Add Content</p>");
-    $(this).addClass("add-btn-animate");
+    $(this).addClass("add-btn");
 }, function() {
     $(this).find("p").remove();
 });

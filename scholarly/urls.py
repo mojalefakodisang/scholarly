@@ -18,6 +18,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from users import views as user_views
+from moderator import views as mod_views
 from content import views as content_views
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
@@ -29,6 +30,7 @@ urlpatterns = [
     path("content/", include("content.urls")),
     path("student/", include("student.urls")),
     path("contributor/", include("contributor.urls")),
+    path("moderator/", include("moderator.urls")),
     path("login/", user_views.login_view, name="login"),
     path("explore/", content_views.explore, name="explore"),
     path("logout/", user_views.logout_user, name="logout"),
@@ -36,6 +38,7 @@ urlpatterns = [
     path("reset_request/", user_views.request_reset, name='request_reset'),
     path("reset_password/<str:username>/<str:token>/",
          user_views.reset_password, name='reset_password'),
+    path("validate/", mod_views.validate, name='validate-token'),
 ]
 
 if settings.DEBUG:

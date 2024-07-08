@@ -38,6 +38,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-2">
+                                    <div class="row">
+                                        {% if user.role == 'MODERATOR' %}
+                                            {% if content.approved == 'Approved' %}
+                                                <div class="col-12">
+                                                    <h4 class="badge bg-success text-light">Approved</h4>
+                                                </div>
+                                                <div class="col-12">
+                                                    <a href="{% url 'disapprove' content_id=content.id %}" class="badge btn btn-sm btn-outline-dark">Disapprove content</a>
+                                                </div>
+                                            {% elif content.approved == 'Not Approved' %}
+                                                <div class="col-12">
+                                                    <h4 class="badge bg-danger text-light">Not Approved</h4>
+                                                </div>
+                                                <div class="col-12">
+                                                    <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-xs btn-outline-success">Approve content</a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-12">
+                                                    <h4 class="badge bg-warning text-light">Pending</h4>
+                                                </div>
+                                                <div class="col-12">
+                                                    <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-sm btn-outline-success">Approve content</a>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
                                 <div class="col-lg-4 col-sm-12">
                                     {% if user == content.user %}
                                         <div class="row">

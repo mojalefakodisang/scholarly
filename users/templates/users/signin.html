@@ -1,29 +1,73 @@
-{% extends 'users/auth_base.html' %}
-{% load crispy_forms_tags %}
+{% extends 'users/auth_layout.html' %}
+{% load form_tags %}
+{% block title %}{{ title }}{% endblock title %}
+{% load static %}
 {% block content %}
     <div class="container">
-        <div class="row d-flex justify-content-center align-items-center">
+        <div class="row d-flex justify-content-center align-items-center mb-5">
             <div class="col-lg-5 col-sm-12">
                 <div class="card mt-5">
-                    <div class="card-body">
-                        <h4 class="card-title">Sign in</h4>
+                    <div class="card-body d-flex flex-column align-items-center">
                         {% if messages %}
                             {% for message in messages %}
-                                <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                <div class="alert alert-{{ message.tags }}">
                                     <small>{{ message }}</small>
                                 </div>
                             {% endfor %}
                         {% endif %}
-                        <form method="POST" class="mb-3">
+                        <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4">
+                            <div class="d-lg-block d-none">
+                                <img src="{% static 'users/img/scholarly_horizontal-01.png' %}" alt="" class="logo-horizontal">
+                            </div>
+                            <div class="d-md-block d-sm-block d-xs-block d-lg-none d-xl-none d-xxl-none">
+                                <img src="{% static 'users/img/scholarly_favicon-01.png' %}" alt="" class="logo">
+                            </div>
+                        </div>
+                        <form method="POST" action="">
                             {% csrf_token %}
-                            {{ form|crispy }}
-                            <button type="submit" class="btn btn-primary">Sign in</button>
-                        </form>
-                        <small class="text-muted">Forgot password? <a href="{% url 'request_reset' %}">Reset Password</a></small>
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.username_for_label }}" class="form-control-label">{{ form.username.label }}</label>
+                                        </div>
+                                        {% if form.username.errors %}
+                                            <div class="">{{ form.username|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.username.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>{{ form.username|add_class:"form-control form-control-sm" }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.password.id_for_label }}" class="form-control-label">{{ form.password.label }}</label>
+                                        </div>
+                                        {% if form.password.errors %}
+                                            <div class="">{{ form.password|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.password.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>{{ form.password|add_class:"form-control form-control-sm" }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary text-bg-dark d-block w-100">Sign in</button>
+                                </div>
+                            </fieldset>
+                        <small class="text-muted" style="font-size: 10px;">Forgot password? <a href="{% url 'request_reset' %}">Reset Password</a></small>
                         <br />
-                        <small class="text-muted">Don't have an account? Sign up as a 
+                        <small class="text-muted" style="font-size: 10px;padding-top: 0px;">Don't have an account? Sign up as a 
                             <a href="{% url 'st-register' %}">Student</a> or 
-                            <a href="{% url 'contr-register' %}">Contributor</a>
+                            <a href="{% url 'contr-register' %}">Contributor</a> or
+                            <a href="{% url 'mod-register' %}">Moderator</a>
                         </small>
                     </div>
                 </div>

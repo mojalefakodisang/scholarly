@@ -5,7 +5,8 @@ from .models import Content, SavedContent
 from django.shortcuts import render, redirect
 from .forms import CreateContent, UpdateContent
 from django.contrib.auth.decorators import login_required
-from contributor.models import Contributor, ContributorProfile
+from contributor.models import ContributorProfile
+from moderator.models import ModeratorProfile
 
 
 @login_required
@@ -54,10 +55,12 @@ def explore(request):
     if len(contents) == 0:
         contents = None
 
-    if request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile()
-    elif request.user.role == 'STUDENT':
-        profile = StudentProfile()
+    if request.user.role == 'STUDENT':
+        profile = StudentProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'CONTRIBUTOR':
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     context = {
         'contributors': contributors,
@@ -80,9 +83,11 @@ def content_view(request, content_id):
         return redirect('explore')
 
     if request.user.role == 'STUDENT':
-        profile = StudentProfile()
+        profile = StudentProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile()
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     context = {
         'contributors': contributors,

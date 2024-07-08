@@ -6,26 +6,27 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import BaseUserManager
 
 
-class StudentManager(BaseUserManager):
+class ModeratorManager(BaseUserManager):
     def get_queryset(self, *args, **kwargs):
         results = super().get_queryset(*args, **kwargs)
-        return results.filter(role=User.Role.STUDENT)
+        return results.filter(role=User.Role.MODERATOR)
 
 
-class Student(User):
+class Moderator(User):
 
-    base_role = User.Role.STUDENT
+    base_role = User.Role.MODERATOR
 
-    student = StudentManager()
+    moderator = ModeratorManager()
 
     class Meta:
         proxy = True
 
 
-class StudentProfile(models.Model):
+class ModeratorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    student_id = models.IntegerField(null=True, blank=True)
-    image = models.ImageField(default='default.jpg', upload_to='stud_pics')
+    moderator_id = models.IntegerField(null=True, blank=True)
+    token = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(default='default.jpg', upload_to='moderator_pics')
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -42,10 +43,10 @@ class StudentProfile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == User.Role.STUDENT:
-        StudentProfile.objects.create(user=instance)
+    if created and instance.role == User.Role.CONTRIBUTOR:
+        ModeratorProfile.objects.create(user=instance)
     else:
         try:
-            instance.studentprofile.save()
-        except User.studentprofile.RelatedObjectDoesNotExist:
-            StudentProfile.objects.create(user=instance)
+            instance.moderatorprofile.save()
+        except User.moderatorprofile.RelatedObjectDoesNotExist:
+            ModeratorProfile.objects.create(user=instance)

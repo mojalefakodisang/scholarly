@@ -20,7 +20,7 @@ def register(request):
         form = RegisterForm()
 
     context = {
-        'title': 'Contributor - Register',
+        'title': 'Scholarly | Student - Register',
         'form': form
     }
     return render(request, 'contributor/register.html', context=context)

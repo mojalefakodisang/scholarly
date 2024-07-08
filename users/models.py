@@ -7,11 +7,11 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     class Role(models.TextChoices):
-        ADMIN = "ADMIN", "Admin"
+        MODERATOR = "MODERATOR", "Moderator"
         STUDENT = "STUDENT", "Student"
         CONTRIBUTOR = "CONTRIBUTOR", "Contributor"
 
-    base_role = Role.ADMIN
+    base_role = Role.STUDENT
 
     role = models.CharField(max_length=50, choices=Role.choices)
 
@@ -29,3 +29,8 @@ class User(AbstractUser):
     def contributorprofile(self):
         ContributorProfile = apps.get_model('contributor', 'ContributorProfile')
         return ContributorProfile.objects.get(user=self)
+
+    @property
+    def moderatorprofile(self):
+        ModeratorProfile = apps.get_model('moderator', 'ModeratorProfile')
+        return ModeratorProfile.objects.get(user=self)
