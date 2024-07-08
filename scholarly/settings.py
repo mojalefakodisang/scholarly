@@ -44,6 +44,18 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+        'http://web-01.scholarlyonline.live',
+        'https://web-01.scholarlyonline.live',
+        'http://web-02.scholarlyonline.live',
+        'https://web-02.scholarlyonline.live',
+        'http://scholarlyonline.live',
+        'https://scholarlyonline.live',
+        'http://www.scholarlyonline.live',
+        'https://www.scholarlyonline.live',
+]
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

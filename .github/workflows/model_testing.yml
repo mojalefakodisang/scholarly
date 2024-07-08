@@ -52,19 +52,19 @@ jobs:
             if [ -d "scholarly" ]; then
               cd scholarly
               git pull origin main
-              apt-get install -y python3-pip
+              sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              systemctl restart scholarly.service
+              sudo systemctl restart scholarly.service
             else
               git clone https://github.com/mojalefakodisang/scholarly
               cd scholarly
-              apt-get install -y python3-pip
+              sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              systemctl restart scholarly.service
+              sudo systemctl restart scholarly.service
             fi
 
       - name: Deploy to web_server_02
@@ -77,17 +77,17 @@ jobs:
             if [ -d "scholarly" ]; then
               cd scholarly
               git pull origin main
-              apt-get install -y python3-pip
+              sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              systemctl restart scholarly.service
+              sudo systemctl restart scholarly.service
             else
               git clone https://github.com/mojalefakodisang/scholarly
               cd scholarly
-              apt-get install -y python3-pip
+              sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              systemctl restart scholarly.service
+              sudo systemctl restart scholarly.service
             fi
