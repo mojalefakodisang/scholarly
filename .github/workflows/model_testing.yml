@@ -23,15 +23,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Set up environment variables
-          env:
-            DB_NAME: ${{ secrets.DB_NAME }}
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            DB_HOST: ${{ secrets.DB_HOST }}
-            DB_PORT: ${{ secrets.DB_PORT }}
+      - name: Set up environment
+        run: echo "Environment variables set"
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
 
       - name: Run tests
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
         run: |
           python manage.py test
 
@@ -43,9 +50,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             if [ -d "scholarly" ]; then
-            cd scholarly
-            git pull origin main
-            sudo apt-get install -y python3-pip
+              cd scholarly
+              git pull origin main
+              sudo apt-get install -y python3-pip
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
@@ -53,6 +60,7 @@ jobs:
             else
               git clone https://github.com/mojalefakodisang/scholarly
               cd scholarly
+              sudo apt-get install -y python3-pip
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
