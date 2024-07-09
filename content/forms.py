@@ -19,3 +19,10 @@ class UpdateContent(forms.ModelForm):
     class Meta:
         model = Content
         fields = ['title', 'category', 'description', 'content']
+
+class CreateCategoryForm(forms.ModelForm):
+    name = forms.CharField(max_length=255, min_length=2)
+
+    class Meta:
+        model = Category
+        fields = ['name']

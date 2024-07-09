@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from review.models import Review
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
-from content.models import Content, SavedContent
+from content.models import Content, SavedContent, ModeratedContent
 from django.core.exceptions import ValidationError
 from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
@@ -23,9 +23,8 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and user.is_active == True:
             login(request, user)
-            print(user)
             return redirect('dashboard')
         else:
             messages.warning(request, 'Invalid username or password')
@@ -47,7 +46,7 @@ def logout_user(request):
     
 @login_required
 def dashboard(request):
-    count = 0
+    count = t_count = 0
     tasks = []
     notifications = []
     empty_ = ['', None]
@@ -62,8 +61,8 @@ def dashboard(request):
         profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     reviews = Review.objects.all()
-    review = Review.objects.filter(student=request.user).first() # fix to filter only students
-    content = Content.objects.filter(user=request.user) # fix to filter only contributors
+    review = Review.objects.filter(student=request.user).first()
+    content = Content.objects.filter(user=request.user)
     saved = SavedContent.objects.filter(student_id=request.user.id).first()
 
     for con in content:
@@ -81,6 +80,8 @@ def dashboard(request):
         tasks = None
 
     context = {
+        'user': request.user,
+        'path': request.path,
         'title': 'Dashboard',
         'profile': profile,
         'user': request.user,
@@ -107,7 +108,7 @@ def request_reset(request):
             Hi {user.username},\n\n
             You have requested to reset your password.\n
             To proceed, please click the link below:\n
-            http://localhost:8000/reset_password/{user.username}/{reset_token}\n\n
+            https://scholarlyonline.live/reset_password/{user.username}/{reset_token}\n\n
             Regards,\n
             Technical Team, Scholarly
             """

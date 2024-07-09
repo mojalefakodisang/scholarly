@@ -1,0 +1,142 @@
+.bs-icon {
+    --bs-icon-size: .75rem;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--bs-icon-size);
+    width: calc(var(--bs-icon-size) * 2);
+    height: calc(var(--bs-icon-size) * 2);
+    color: var(--bs-primary);
+}
+  
+.bs-icon-xs {
+  --bs-icon-size: 1rem;
+  width: calc(var(--bs-icon-size) * 1.5);
+  height: calc(var(--bs-icon-size) * 1.5);
+}
+
+.bs-icon-sm {
+  --bs-icon-size: 1rem;
+}
+
+.bs-icon-md {
+  --bs-icon-size: 1.5rem;
+}
+
+.bs-icon-lg {
+  --bs-icon-size: 2rem;
+}
+
+.bs-icon-xl {
+  --bs-icon-size: 2.5rem;
+}
+
+.bs-icon.bs-icon-primary {
+  color: var(--bs-white);
+  background: var(--bs-primary);
+}
+
+.bs-icon.bs-icon-primary-light {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), .2);
+}
+
+.bs-icon.bs-icon-semi-white {
+  color: var(--bs-primary);
+  background: rgba(255, 255, 255, .5);
+}
+
+.bs-icon.bs-icon-rounded {
+  border-radius: .5rem;
+}
+
+.bs-icon.bs-icon-circle {
+  border-radius: 50%;
+}
+
+* .card {
+  z-index: 0;
+}
+
+.logo {
+    width: 60px;
+}
+
+.card-profile-pic {
+    width: 100px;
+    height: auto;
+}
+
+.add-btn:hover {
+    scale: 0.9;
+}
+
+.main-card:hover {
+    scale: 1.05;
+    z-index: 2;
+}
+
+.not-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: bright infinite ease-in-out;
+    animation: bright 1.5s infinite;
+}
+
+@keyframes bright {
+    from {
+        opacity: 0.5;
+        transform: scale(0.9);
+        background-color: skyblue;
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.0);
+        background-color: #75b2dd;
+    }
+}
+
+.navbar {
+    background: linear-gradient(
+        top,
+        white,
+        transparent
+    ) !important;
+}
+
+.content-profile-card {
+    display: none;
+    position: absolute;
+    left: 100px;
+}
+
+.content-profile-card:hover {
+    display: block;
+}
+
+.content-profile:hover + .content-profile-card {
+    display: block;
+}
+
+.rating {
+    display: flex;
+    justify-content: evenly;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+.rating label {
+    font-size: 2em;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input[type="radio"]:checked ~ label {
+    color: #f7c600;
+}

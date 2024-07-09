@@ -6,6 +6,15 @@
         <div class="row">
             <div class="col-lg-12 col-md-12" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
                 <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+                    <div class="col-12">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="mt-2 mb-5 alert alert-{{ message.tags }}">
+                                    <small>{{ message }}</small>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                     <div class="row" style="padding-bottom: 20px;">
                         <div class="col">
                             <h1>Explore</h1>
@@ -26,7 +35,7 @@
                                 {% for content in contents %}
                                     {% if content.approved == 'Approved' %}
                                         <div class="col-lg-6 col-xl-6">
-                                                <div class="card">
+                                                <div class="card main-card">
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center " style="display: flex;">
@@ -73,7 +82,7 @@
                             <div class="row" style="margin-bottom: 30px;">
                                 {% for content in contents %}
                                     <div class="col-lg-6 col-xl-6">
-                                        <div class="card">
+                                        <div class="card main-card">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center " style="display: flex;">

@@ -3,10 +3,11 @@ from django.contrib import messages
 from student.models import StudentProfile
 from .models import Content, SavedContent
 from django.shortcuts import render, redirect
-from .forms import CreateContent, UpdateContent
+from .forms import CreateContent, UpdateContent, CreateCategoryForm
 from django.contrib.auth.decorators import login_required
 from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
+from review.forms import CreateReview
 
 
 @login_required
@@ -38,6 +39,7 @@ def create_content(request):
     context = {
         'form': form,
         'profile': profile,
+        'path': request.path
     }
     return render(request, 'content/create_content.html', context=context)
 
@@ -63,6 +65,7 @@ def explore(request):
         profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     context = {
+        'path': request.path,
         'contributors': contributors,
         'contents': contents,
         'profile': profile,
@@ -89,12 +92,37 @@ def content_view(request, content_id):
     elif request.user.role == 'MODERATOR':
         profile = ModeratorProfile.objects.filter(user=request.user).first()
 
+    if len(reviews) == 0:
+        reviews = None
+
+    if request.method == 'POST':
+        form = CreateReview(request.POST)
+        if form.is_valid():
+            rev = form.cleaned_data['review_content']
+            rating = form.cleaned_data['rating']
+            review = Review(
+                student=request.user,
+                content=content,
+                review_content=rev,
+                rating=rating)
+
+            review.save()
+            messages.success(request, 'Review posted successfully')
+            return redirect('content-view', content_id=content_id)
+        else:
+            messages.warning(request, 'Unable to post Review')
+            return redirect('content-view', content_id=content_id)
+    else:
+        form = CreateReview()
+
     context = {
         'contributors': contributors,
         'content': content,
         'profile': profile,
         'reviews': reviews,
-        'saved': saved
+        'saved': saved,
+        'path': request.path,
+        'form': form
     }
 
     return render(request, 'content/content_view.html', context=context)
@@ -117,6 +145,7 @@ def content_update(request, content_id):
             content.description = form.cleaned_data['description']
             content.content = form.cleaned_data['content']
             content.category = form.cleaned_data['category']
+            content.approve = 'Pending'
             content.save()
 
             messages.success(request, 'Content updated successfully')

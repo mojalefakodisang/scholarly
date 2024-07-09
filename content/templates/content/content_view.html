@@ -1,142 +1,170 @@
 {% extends 'users/main.html' %}
-{% load crispy_forms_tags %}
+{% load form_tags %}
 {% block main %}
-    <div class="container p-5 main">
-        <div class="row mb-5">
-            <div class="col-12 mb-2">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
-                            <small>{{ message }}</small>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="col-12 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row border-bottom mb-2 d-flex justify-content-center align-items-center pb-3">
-                                <div class="col-lg-2 col-sm-6">
-                                    {% for contr in contributors %}
-                                        {% if contr.user.username == content.user.username %}
-                                            <img src="{{ contr.image.url }}" alt="" class="rounded-circle" width="60px">
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <div class="d-flex justify-content-center align-items-center col-lg-6 col-sm-6 ms-0 mb-3">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            {% if content.user.first_name != '' %}
-                                                <h4 class="card-title mb-0">{{ content.user.first_name }} {{ content.user.last_name }}</h6>
-                                            {% else %}
-                                                <h4 class="card-title mb-0">{{ content.user.username }}</h6>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 border-bottom mb-5" style="padding-top: 50px; margin-top: 80px;padding-bottom: 30px;">
+            <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+                <div class="col-12 mb-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                <small>{{ message }}</small>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="row">  
+                    <div class="col-2 content-profile d-flex justify-content-center">
+                        {% for contr in contributors %}
+                            {% if contr.user.username == content.user.username %}
+                                <img src="{{ contr.image.url }}" alt="" class="rounded-circle" width="100px">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-6 content-profile-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-2 d-none d-lg-block d-xl-block d-xxl-block">
+                                        {% for contr in contributors %}
+                                            {% if contr.user.username == content.user.username %}
+                                                <img src="{{ contr.image.url }}" alt="" class="rounded-circle" width="60px">
                                             {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-8">
                                         <div class="col-12">
-                                            <small class="text-muted">{{ content.user.email }}</small>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-2">
-                                    <div class="row">
-                                        {% if user.role == 'MODERATOR' %}
-                                            {% if content.approved == 'Approved' %}
+                                            <div class="row">
                                                 <div class="col-12">
-                                                    <h4 class="badge bg-success text-light">Approved</h4>
-                                                </div>
-                                                <div class="col-12">
-                                                    <a href="{% url 'disapprove' content_id=content.id %}" class="badge btn btn-sm btn-outline-dark">Disapprove content</a>
-                                                </div>
-                                            {% elif content.approved == 'Not Approved' %}
-                                                <div class="col-12">
-                                                    <h4 class="badge bg-danger text-light">Not Approved</h4>
-                                                </div>
-                                                <div class="col-12">
-                                                    <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-xs btn-outline-success">Approve content</a>
-                                                </div>
-                                            {% else %}
-                                                <div class="col-12">
-                                                    <h4 class="badge bg-warning text-light">Pending</h4>
-                                                </div>
-                                                <div class="col-12">
-                                                    <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-sm btn-outline-success">Approve content</a>
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-12">
-                                    {% if user == content.user %}
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <a href="{% url 'content-update' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Update</a>
-                                            </div>
-                                            <div class="col-6">
-                                                <a href="{% url 'content-delete' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Delete</a>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                                <div class="col-12 d-flex justify-content-center align-items-center ">
-                                                    {% if user.role == 'STUDENT' %}
-                                                        {% if saved is None %}
-                                                            <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
-                                                                <span class="material-symbols-outlined">
-                                                                    bookmark
-                                                                </span>
-                                                            </a>
-                                                        {% elif saved.content == content %}
-                                                            <a class="text-dark" href="{% url 'content-unsave' saved_id=saved.id content_id=content.id %}">
-                                                                <div class="filled">
-                                                                    <span class="material-symbols-outlined">
-                                                                        bookmark
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        {% else %}
-                                                            <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
-                                                                <span class="material-symbols-outlined">
-                                                                    bookmark
-                                                                </span>
-                                                            </a>
-                                                        {% endif %}
-                                                        <a href="{% url 'create-review' content_id=content.id %}" class="nav-link text-dark">
-                                                            <div class="d-flex justify-content-center align-items-center col-6">
-                                                                <span class="material-symbols-outlined">
-                                                                    add_comment
-                                                                </span>
-                                                            </div>
-                                                        </a>
+                                                    {% if content.user.first_name != '' %}
+                                                        <h4 class="card-title mb-0">{{ content.user.first_name }} {{ content.user.last_name }}</h6>
+                                                    {% else %}
+                                                        <h4 class="card-title mb-0">{{ content.user.username }}</h6>
                                                     {% endif %}
                                                 </div>
+                                                <div class="col-12">
+                                                    <small class="text-muted">{{ content.user.email }}</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="row mb-2 container">
-                                <div class="col-9 mt-3 mb-3">
-                                    <div class="row">
-                                        <h3 class="card-title mb-0">{{ content.title }}</h3>
-                                    </div>
-                                    <div class="row me-auto">
-                                        <div class="col-10">
-                                            <small class="text-muted">{{ content.created_at }}</small>
+                                        <div class="col-12">
+            
                                         </div>
                                     </div>
-                                </div>
-                                <h5 class="text-muted">{{ content.description }}</h5>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="container">
-                                    <p>{{ content.content }}</p>
+                                    <div class="col-2 d-flex align-items-center">
+                                        <a href="#" class="btn btn-sm btn-outline-dark">View</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-8">
+                        <div class="col-12">
+                            <h1>{{ content.title }}</h1>
+                        </div>
+                        <div class="col-12">
+                            <p>Created by 
+                                {% if content.user.first_name != '' %}
+                                    <span class="card-title mb-0">{{ content.user.first_name }} {{ content.user.last_name }}</span>
+                                {% else %}
+                                    <span class="card-title mb-0">{{ content.user.username }}</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="col-lg-4 col-sm-12">
+                            {% if user == content.user %}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <a href="{% url 'content-update' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Update</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{% url 'content-delete' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Delete</a>
+                                    </div>
+                                </div>
+                            {% elif user.role == 'MODERATOR' %}
+                                {% if content.approved == 'Approved' %}
+                                    <div class="col-12">
+                                        <h4 class="badge bg-success text-light">Approved</h4>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="{% url 'disapprove' content_id=content.id %}" class="badge btn btn-sm btn-outline-dark">Disapprove content</a>
+                                    </div>
+                                {% elif content.approved == 'Not Approved' %}
+                                    <div class="col-12">
+                                        <h4 class="badge bg-danger text-light">Not Approved</h4>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-xs text-success btn-outline-success">Approve content</a>
+                                    </div>
+                                {% else %}
+                                    <div class="col-12">
+                                        <h4 class="badge bg-warning text-light">Pending</h4>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-sm text-light bg-success ">Approve content</a>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-center align-items-center ">
+                                        {% if user.role == 'STUDENT' %}
+                                            {% if saved is None %}
+                                                <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                    <span class="material-symbols-outlined">
+                                                        bookmark
+                                                    </span>
+                                                </a>
+                                            {% elif saved.content == content %}
+                                                <a class="text-dark" href="{% url 'content-unsave' saved_id=saved.id content_id=content.id %}">
+                                                    <div class="filled">
+                                                        <span class="material-symbols-outlined">
+                                                            bookmark
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            {% else %}
+                                                <a class="text-dark" href="{% url 'content-save' content_id=content.id %}">
+                                                    <span class="material-symbols-outlined">
+                                                        bookmark
+                                                    </span>
+                                                </a>
+                                            {% endif %}
+                                            <a href="{% url 'create-review' content_id=content.id %}" class="nav-link text-dark">
+                                                <div class="d-flex justify-content-center align-items-center col-6">
+                                                    <span class="material-symbols-outlined">
+                                                        add_comment
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="col-12 container pb-5 border-bottom mb-3">
+            <small><div class="col-12">
+                <p class="text-muted">{{ content.created_at }}</p>
+            </div></small>
+            <h5>Description</h5>
+            <p class="text-muted">{{ content.description }}</p>
+        </div>
+        <div class="col-12 container pb-5 mb-3">
+            <p>{{ content.content }}</p>
+        </div>
+
+    </div>
+</div>
+
+    <div class="container p-5 main">
+        <div class="row mb-5">
+            
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -144,7 +172,8 @@
                         <div class="content container">
                             {% if reviews is None %}
                                 <div class="container text-center">
-                                    <p class="text-muted">No reviews available. You can create a review below and rate this article</p>
+                                    <h4 class="text-muted">No reviews available.</h4>
+                                    <p class="text-muted">You can create a review below and rate this article if you are a student</p>
                                 </div>
                             {% else %}
                                 {% for r in reviews %}
@@ -195,14 +224,66 @@
                                 {% endfor %}
                             {% endif %}
                             <div class="text-center">
-                                <a href="{% url 'create-review' content_id=content.id %}" class="text-muted add-review-btn">
-                                    <span class="material-symbols-outlined">
-                                        add_circle
-                                    </span>
-                                </a>
+                                {% if user.role == 'STUDENT' %}
+                                    <button type="button" class="btn btn-sm bg-light add-btn" data-bs-toggle="modal" data-bs-target="#addReview">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-dotted" viewBox="0 0 16 16">
+                                            <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                                        </svg>
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    <!-- Modal -->
+    <div class="modal fade" id="addReview" tabindex="-1" aria-labelledby="addCategory" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <div class="d-flex justify-content-start">
+                                <label for="{{ form.review_content_for_label }}" class="form-control-label">{{ form.review_content.label }}</label>
+                            </div>
+                            {% if form.review_content.errors %}
+                                <div class="">{{ form.review_content|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                <div class="invalid-feedback">
+                                    {% for error in form.review_content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div>{{ form.review_content|add_class:"form-control form-control-sm" }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 mb-3 mt-3">
+                            <div class="d-flex justify-content-start">
+                                <label for="{{ form.rating_for_label }}" class="form-control-label">{{ form.rating.label }}</label>
+                            </div>
+                            <div class="d-flex">
+                                <fieldset class="rating">
+                                    {% for value, label in form.rating.field.choices %}
+                                    <input type="radio" id="star{{ value }}" name="rating" value="{{ value }}" {% if form.rating.value == value %}checked{% endif %}/>
+                                    <label for="star{{ value }}" title="{{ label }}"></label>
+                                    {% endfor %}
+                                </fieldset>
+                            </div>
+                            {% if form.rating.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.rating.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-dark">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

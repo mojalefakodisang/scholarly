@@ -141,6 +141,7 @@ USE_TZ = True
 STATICFILES_DIRS = [
     "users/static",
     "contributor/static",
+    "content/static",
 ]
 
 STATIC_URL = "/static/"

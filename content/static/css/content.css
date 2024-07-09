@@ -1,0 +1,7 @@
+.content-profile-pic {
+    display: none;
+}
+
+.content-profile:hover > .content-profile-pic {
+    display: block;
+}
