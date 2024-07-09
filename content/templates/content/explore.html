@@ -123,6 +123,117 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    {% elif user.role == 'CONTRIBUTOR' %}
+                        <div style="margin: 30px 0px 0px;margin-top: 36px;">
+                            <div class="row" style="margin-bottom: 30px;">
+                                {% for content in contents %}
+                                    {% if content.approved == 'Pending' or content.approved == 'Not Approved' %}
+                                        <div class="col-lg-6 col-xl-6 mb-3">
+                                            <div class="card main-card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex align-items-center align-items-sm-end align-items-md-center align-items-lg-center align-items-xl-center align-items-xxl-center">
+                                                            <div class="not-not-live"></div>
+                                                            <small class="text-muted ms-3 d-sm-none d-xl-block d-xxl-block d-lg-block">NOT LIVE</small>
+                                                        </div>
+                                                        <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center " style="display: flex;">
+                                                            <img class="border rounded-circle card-profile-pic" alt="" src="{{ profile.image.url }}">
+                                                        </div>
+                                                        <div class="col">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        {% if content.user.first_name != '' and content.user.last_name != '' %}
+                                                                            <h5>{{ content.user.first_name }} {{ content.user.last_name }}</h5>
+                                                                        {% else %}
+                                                                            <h5>{{ content.user.username }}</h5>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="col-lg-12">
+                                                                        <p class="text-muted" style="margin-bottom: 0px;">{{ content.user.email }}</p>
+                                                                        <p class="text-muted">{{ content.created_at }}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <h6>{{ content.title }}</h6>
+                                                                <p>{{ content.description }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-12">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex align-items-center align-items-sm-center align-items-md-center align-items-lg-center align-items-xl-center align-items-xxl-center">
+                                                                        {% if content.approved == 'Not Approved' %}
+                                                                            <span class="badge bg-danger">Not Approved</span>
+                                                                        {% else %}
+                                                                            <span class="badge bg-warning">Pending</span>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-end justify-content-sm-end justify-content-md-end justify-content-lg-end justify-content-xl-end" style="display: flex;">
+                                                                        <a class="btn btn-primary" href="{% url 'content-view' content_id=content.id %}">Read Article</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% elif content.approved == 'Approved' %}
+                                        <div class="col-lg-6 col-xl-6">
+                                            <div class="card main-card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center " style="display: flex;">
+                                                            <img class="border rounded-circle card-profile-pic" alt="" src="{{ profile.image.url }}">
+                                                        </div>
+                                                        <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex align-items-center align-items-sm-center align-items-md-center align-items-lg-center align-items-xl-center align-items-xxl-center">
+                                                            <div class="not-live"></div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12">
+                                                                        {% if content.user.first_name != '' and content.user.last_name != '' %}
+                                                                            <h5>{{ content.user.first_name }} {{ content.user.last_name }}</h5>
+                                                                        {% else %}
+                                                                            <h5>{{ content.user.username }}</h5>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="col-lg-12">
+                                                                        <p class="text-muted" style="margin-bottom: 0px;">{{ content.user.email }}</p>
+                                                                        <p class="text-muted">{{ content.created_at }}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <h6>{{ content.title }}</h6>
+                                                                <p>{{ content.description }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-12">
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex align-items-center align-items-sm-center align-items-md-center align-items-lg-center align-items-xl-center align-items-xxl-center">
+                                                                        {% if content.approved == 'Approved' %}
+                                                                            <span class="badge bg-success">Approved</span>
+                                                                        {% elif content.approved == 'Not Approved' %}
+                                                                            <span class="badge bg-danger">Not Approved</span>
+                                                                        {% else %}
+                                                                            <span class="badge bg-warning">Pending</span>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-end justify-content-sm-end justify-content-md-end justify-content-lg-end justify-content-xl-end" style="display: flex;">
+                                                                        <a class="btn btn-primary" href="{% url 'content-view' content_id=content.id %}">Read Article</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endif %}
                 {% else %}
                     <div>

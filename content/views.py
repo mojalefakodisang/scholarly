@@ -64,6 +64,7 @@ def explore(request):
 
     context = {
         'contributors': contributors,
+        'path': request.path,
         'contents': contents,
         'profile': profile,
         'saved': saved
@@ -117,6 +118,7 @@ def content_update(request, content_id):
             content.description = form.cleaned_data['description']
             content.content = form.cleaned_data['content']
             content.category = form.cleaned_data['category']
+            content.approved = 'Pending'
             content.save()
 
             messages.success(request, 'Content updated successfully')

@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from review.models import Review
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
-from content.models import Content, SavedContent
+from content.models import Content, SavedContent, ModeratedContent
 from django.core.exceptions import ValidationError
 from .utils import send_email, generate_reset_token
 from django.contrib.auth import authenticate, login
@@ -47,33 +47,44 @@ def logout_user(request):
     
 @login_required
 def dashboard(request):
-    count = 0
+    n_count = t_count = 0
     tasks = []
     notifications = []
     empty_ = ['', None]
+    moderated = []
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
+    
+    reviews = Review.objects.all()
+    review = Review.objects.filter(student=request.user).first()
+    content = Content.objects.filter(user=request.user).order_by('-created_at')
+    contents = Content.objects.all() # All contents
+    saved = SavedContent.objects.filter(student_id=request.user.id).first()
+
+    for cont in contents:
+        if cont.approved != 'Approved':
+            t_count += 1
 
     if request.user.role == 'STUDENT':
         profile = StudentProfile.objects.filter(user=request.user).first()
+
     elif request.user.role == 'CONTRIBUTOR':
         profile = ContributorProfile.objects.filter(user=request.user).first()
+        
     elif request.user.role == 'MODERATOR':
         profile = ModeratorProfile.objects.filter(user=request.user).first()
-
-    reviews = Review.objects.all()
-    review = Review.objects.filter(student=request.user).first() # fix to filter only students
-    content = Content.objects.filter(user=request.user) # fix to filter only contributors
-    saved = SavedContent.objects.filter(student_id=request.user.id).first()
+        if t_count > 0:
+            tasks.append(f'You have {t_count} contents to moderate')
+        moderated = ModeratedContent.objects.filter(moderator=request.user).all()
 
     for con in content:
         for rev in reviews:
             if rev.content == con:
-                count += 1
-        if count == 0:
+                n_count += 1
+        if n_count == 0:
             notifications = None
         else:
-            notifications.append(f'You have {count} reviews for {con.title}')
+            notifications.append(f'You have {n_count} reviews for {con.title}')
 
     if len(content) == 0:
         content = None
@@ -82,6 +93,7 @@ def dashboard(request):
 
     context = {
         'title': 'Dashboard',
+        'path': request.path,
         'profile': profile,
         'user': request.user,
         'content': content,
@@ -89,6 +101,10 @@ def dashboard(request):
         'tasks': tasks,
         'notifications': notifications,
         'saved': saved,
+        'bookmarks': 1,
+        'ratings': 0,
+        'reviews': 0,
+        'moderated': moderated,
         'latest_content': content[0] if content != None else None
     }
 
@@ -107,7 +123,7 @@ def request_reset(request):
             Hi {user.username},\n\n
             You have requested to reset your password.\n
             To proceed, please click the link below:\n
-            http://localhost:8000/reset_password/{user.username}/{reset_token}\n\n
+            https://scholarlyonline.live/reset_password/{user.username}/{reset_token}\n\n
             Regards,\n
             Technical Team, Scholarly
             """

@@ -68,6 +68,10 @@
     height: auto;
 }
 
+.add-btn {
+    scale: 1;
+}
+
 .add-btn:hover {
     scale: 0.9;
 }
@@ -81,20 +85,37 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
+    background-color: skyblue;
+    transition: bright infinite ease-in-out;
+    animation: bright 1.5s infinite;
+}
+
+.not-not-live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    transition: bright infinite ease-in-out;
+    animation: bright 1.5s infinite;
+}
+
+.not-live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
     transition: bright infinite ease-in-out;
     animation: bright 1.5s infinite;
 }
 
 @keyframes bright {
     from {
-        opacity: 0.5;
+        opacity: 0.3;
         transform: scale(0.9);
-        background-color: skyblue;
     }
     to {
         opacity: 1;
         transform: scale(1.0);
-        background-color: #75b2dd;
     }
 }
 

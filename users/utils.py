@@ -5,8 +5,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 def send_email(dest, subject, body):
     receiver_email = dest
-    sender_email = os.environ.get('SCHOLARLY_EMAIL')
-    password = os.environ.get('EMAIL_PASSWORD')
+    sender_email = os.getenv('SCHOLARLY_EMAIL')
+    password = os.getenv('EMAIL_PASSWORD')
     message = MIMEText(body)
     message["Subject"] = subject
 
