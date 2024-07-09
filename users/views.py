@@ -14,6 +14,9 @@ from .forms import RequestResetForm, ResetPassword, LoginForm, UserUpdateForm
 from student.models import StudentProfile
 from moderator.models import ModeratorProfile
 from contributor.models import ContributorProfile
+from contributor.forms import UpdateImageForm as ContrImageForm
+from student.forms import UpdateImageForm as StudImageForm
+from moderator.forms import UpdateImageForm as ModImageForm
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
@@ -63,7 +66,7 @@ def dashboard(request):
     reviews = Review.objects.all()
     review = Review.objects.filter(student=request.user).first()
     content = Content.objects.filter(user=request.user)
-    saved = SavedContent.objects.filter(student_id=request.user.id).first()
+    saved = SavedContent.objects.filter(student_id=request.user.id).order_by('-content').first()
 
     for con in content:
         for rev in reviews:
@@ -166,27 +169,41 @@ def reset_password(request, username, token):
 def update_user(request, username):
     user = User.objects.get(username=username)
 
-    if request.user == user and user.role == 'STUDENT':
-        profile = StudentProfile()
-    elif request.user == user and user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile()
-    elif request.user == user and user.role == 'MODERATOR':
-        profile = ModeratorProfile()
+    if request.user.role == 'STUDENT':
+        profile = StudentProfile.objects.filter(user=request.user).first()
+        image_form = StudImageForm
+    elif request.user.role == 'CONTRIBUTOR':
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+        image_form = ContrImageForm
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
+        image_form = ModImageForm
 
     if request.method == 'POST':
         form = UserUpdateForm(request.POST)
-        if form.is_valid():
+        u_form = image_form(request.POST, request.FILES, instance=profile)
+        if form.is_valid() and u_form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.email = form.cleaned_data['email']
+            instance = u_form.save(commit=False)
+            instance.image = request.FILES.get('image')
+            instance.save()
             user.save()
+            print(instance.image.path)
+            print(instance.image.url)
             messages.success(request, 'User information updated successfully')
             return redirect('dashboard')
+        else:
+            messages.warning(request, 'Failed to update user information')
     else:
         form = UserUpdateForm(instance=user)
+        u_form = ContrImageForm(instance=profile)
 
     context = {
+        'u_form': u_form,
         'form': form,
         'profile': profile
     }
     return render(request, 'users/update_user.html', context=context)
+

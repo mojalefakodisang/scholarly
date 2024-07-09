@@ -3,3 +3,9 @@ __pycache__
 venv
 
 Source
+
+media/contr_pics/*
+
+media/stud_pics/*
+
+media/mod_pics/*

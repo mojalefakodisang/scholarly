@@ -110,6 +110,7 @@
     display: none;
     position: absolute;
     left: 100px;
+    top: 90px;
 }
 
 .content-profile-card:hover {
@@ -139,4 +140,15 @@
 .rating label:hover ~ label,
 .rating input[type="radio"]:checked ~ label {
     color: #f7c600;
+}
+
+.reviews {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 500px;
+}
+
+
+.reviews::-webkit-scrollbar {
+    display: none;
 }

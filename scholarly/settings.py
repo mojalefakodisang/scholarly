@@ -68,7 +68,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "scholarly.urls"
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 TEMPLATES = [
     {

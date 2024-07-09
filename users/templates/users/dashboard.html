@@ -323,6 +323,15 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12" style="padding-top: 30px;padding-bottom: 30px;margin-top: 71px;">
                     <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+                        <div class="col-12 mb-2">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                        <small>{{ message }}</small>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                         <div class="row" style="padding-bottom: 20px;">
                             <div class="col">
                                 <h1>Dashboard</h1>
@@ -334,18 +343,15 @@
                         <div class="row" style="margin-bottom: -34px;">
                             <!-- Notifications -->
                             <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
-                                <div class="card">
+                                <div class="card main-card">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
                                                 <div style="width: fit-content;">
                                                     <div class="row">
-                                                        <div class="col-lg-10">
+                                                        <div class="col-lg-12">
                                                             <h4>Notifications</h4>
                                                         </div>
-                                                        <div class="col-sm-2 col-md-2 col-lg-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-9-circle-fill">
-                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8.223 4.146c2.104 0 3.123-1.464 3.123-4.3 0-3.147-1.459-4.014-2.97-4.014-1.63 0-2.871 1.02-2.871 2.73 0 1.706 1.171 2.667 2.566 2.667 1.06 0 1.7-.557 1.934-1.184h.076c.047 1.67-.475 3.023-1.834 3.023-.71 0-1.149-.363-1.248-.72H5.258c.094.908.926 1.798 2.52 1.798Zm.118-3.972c.808 0 1.535-.528 1.535-1.594s-.668-1.676-1.56-1.676c-.838 0-1.517.616-1.517 1.659 0 1.072.708 1.61 1.54 1.61Z"></path>
-                                                            </svg></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -361,13 +367,10 @@
                                         {% if notifications %}
                                             {% for notif in notifications %}
                                                 <div class="col-lg-12" style="margin-bottom: 10px;">
-                                                    <div class="card">
+                                                    <div class="card main-card">
                                                         <div class="card-body">
                                                             <div class="row">
-                                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 d-flex d-sm-flex d-md-flex d-lg-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center align-items-lg-center justify-content-xl-center" style="height: 52px;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-fill" style="font-size: 13px;color: #75b2dd;">
-                                                                        <circle cx="8" cy="8" r="8"></circle>
-                                                                    </svg>
-                                                                </div>
+                                                                <div class="not-icon"></div>
                                                                 <div class="col-10 col-sm-10 col-md-10 col-lg-10 d-md-flex d-lg-flex align-items-md-center align-items-lg-center" style="height: 52px;">
                                                                     <small class="d-md-flex d-lg-flex align-items-md-center align-items-lg-center">{{ notif }}</small>
                                                                 </div>
@@ -407,7 +410,7 @@
                             </div>
                             <!-- Tasks -->
                             <div class="col" style="margin: 12px 0;">
-                                <div class="card">
+                                <div class="card main-card">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-6 col-sm-9 col-md-9 col-lg-8">
@@ -428,9 +431,7 @@
                                                         <div class="card-body">
                                                             <div class="row">
                                                                 <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 d-flex d-sm-flex d-md-flex d-lg-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center align-items-lg-center justify-content-xl-center" style="height: 52px;">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-circle-fill" style="font-size: 13px;color: #75b2dd;">
-                                                                        <circle cx="8" cy="8" r="8"></circle>
-                                                                    </svg>
+                                                                    <div class="not-icon"></div>
                                                                 </div>
                                                                 <div class="col-10 col-sm-10 col-md-10 col-lg-10 d-md-flex d-lg-flex align-items-md-center align-items-lg-center" style="height: 52px;">
                                                                     <small class="d-md-flex d-lg-flex align-items-md-center align-items-lg-center">{{ task }}</small>
@@ -472,7 +473,7 @@
                     <div style="margin: 30px 0px 0px;margin-top: 36px;">
                         <div class="row d-lg-flex justify-content-lg-end">
                             <div class="col-lg-12 col-xl-12" style="margin: 12px 0;margin-top: 0px;">
-                                <div class="card">
+                                <div class="card main-card">
                                     <div class="card-body">
                                         <div style="margin-bottom: 11px;">
                                             <div class="row">
@@ -489,30 +490,30 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center" style="display: flex;"><img class="border rounded-circle" alt="a man standing in front of a red light" style="height: 100px;" src="assets/img/photo-1640960543409-dbe56ccc30e2.jpg"></div>
+                                                            <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center">
+                                                                <img class="border rounded-circle" alt="" width="100px" height="100px" src="assets/img/photo-1640960543409-dbe56ccc30e2.jpg">
+                                                            </div>
                                                             <div class="col">
                                                                 <div>
                                                                     <div class="row">
                                                                         <div>
                                                                             <div class="row">
                                                                                 <div class="col-lg-12">
-                                                                                    {% if user.first_name != '' and user.last_name != '' %}
-                                                                                        <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+                                                                                    {% if saved.content.user.first_name != '' and saved.content.user.last_name != '' %}
+                                                                                        <h5>{{ saved.content.user.first_name }} {{ saved.content.user.last_name }}</h5>
                                                                                     {% else %}
-                                                                                        <h5>{{ user.username }}</h5>
+                                                                                        <h5>{{ saved.content.user.username }}</h5>
                                                                                     {% endif %}
                                                                                 </div>
                                                                                 <div class="col-lg-12">
-                                                                                    <p class="text-muted" style="margin-bottom: 0px;">{{ user.email }}</p>
-                                                                                    <p class="text-muted">{{ saved.created_at }}</p>
+                                                                                    <p class="text-muted" style="margin-bottom: 0px;">{{ saved.content.user.email }}</p>
+                                                                                    <p class="text-muted">{{ saved.content.saved.created_at }}</p>
                                                                                 </div>
                                                                             </div>
-                                                                            <h6>{{ saved.title }}</h6>
-                                                                            <p>{{ saved.description }}</p>
+                                                                            <h6>{{ saved.content.title }}</h6>
+                                                                            <p>{{ saved.content.description }}</p>
                                                                         </div>
                                                                     </div>
-                                                                    <h6>What is photosynthesis?</h6>
-                                                                    <p>In this article we are going to discuss how plants get their energy from the sun to generate glucose.</p>
                                                                     <div class="col" style="margin-bottom: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill">
                                                                             <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
                                                                         </svg><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-star-fill">

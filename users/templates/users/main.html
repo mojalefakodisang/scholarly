@@ -28,7 +28,11 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'explore' %}">Explore</a></li>
                         {% elif path == '/explore/' %}
                             <li class="nav-item"><a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a></li>
+                        {% elif path != '/dashboard/' %}
+                            <li class="nav-item"><a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'explore' %}">Explore</a></li>
                         {% endif %}
+                        
                         {% if user.role == 'CONTRIBUTOR' %}
                             {% if path != '/content/new/' %}
                                 <li class="nav-item"><a class="nav-link" href="{% url 'create-content' %}">New content</a></li>
@@ -37,7 +41,13 @@
                                 <li class="nav-item"><a class="nav-link" href="{% url 'explore' %}">Explore</a></li>
                             {% endif %}
                         {% endif %}
-                    </ul><a class="btn btn-primary ms-md-2" role="button" href="{% url 'logout' %}">Logout</a>
+                    </ul>
+                    <a class="btn btn-primary ms-md-2 mb-sm-2" role="button" href="{% url 'logout' %}">Logout</a>
+                    <div class="ms-lg-5 main-card">
+                        <a href="{% url 'update-user' username=user.username %}">
+                            <img src="{{ profile.image.url }}" alt="" width="40px" height="40px" class="border rounded-circle">
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student
+from .models import Student, StudentProfile
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -18,3 +18,9 @@ class RegisterForm(UserCreationForm):
         self.fields['username'].help_text = ""
         self.fields['email'].help_text = ""
         self.fields['password1'].help_text = ""
+
+class UpdateImageForm(forms.ModelForm):
+    image = forms.ImageField()
+    class Meta:
+        model = StudentProfile
+        fields = ['image']

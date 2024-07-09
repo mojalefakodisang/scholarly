@@ -1,60 +1,124 @@
 {% extends 'users/main.html' %}
-{% load crispy_forms_tags %}
+{% load form_tags %}
 {% block title %}
     {% if title %}
         <title>{{ title }} | {{ user }}</title>
     {% else %}
-        <title>Scholarly | Dashboard</title>
+        <title>Scholarly | User Update</title>
     {% endif %}
 {% endblock title %}
 {% block main %}
-    <div class="col-lg-11 col-md-12 col-sm-12 container main">
-        <div class="row mb-5">
-            <div class="col-12 mb-2">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
-                            <small>{{ message }}</small>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
+            <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+                <div class="col-lg-11 col-md-12 col-sm-12 container main">
+                    <div class="row mb-5">
+                        <div class="col-12 mb-2">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                        <small>{{ message }}</small>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="col-10">
-                <h4>Update information</h4>
-            </div>
-            <div class="col-2">
-                {% if user.role == 'STUDENT' %}
-                    <h4 class="badge bg-warning text-light p-2">Student</h4>
-                {% else %}
-                    <h4 class="badge bg-dark text-light p-2">Contributor</h4>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row mb-5">
-            <div class="card col-6">
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
-                    </form>
-                </div>
-            </div>
-            <div class="col-1"></div>
-            <div class="card col-4">
-                <div class="card-body">
-                    <h6 class="card-title text-center mb-4">Upload Picture</h6>
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-center">
-                            <div class="mb-5">
-                                <img src="{{ profile.image.url }}" alt="" class="update-image">
-                            </div>
+                        <div class="col-10">
+                            <h1>Update information</h1>
+                        </div>
+                        <div class="col-2">
+                            {% if user.role == 'STUDENT' %}
+                                <h4 class="badge bg-primary text-light p-2">Student</h4>
+                            {% elif user.role == 'CONTRIBUTOR' %}
+                                <h4 class="badge bg-dark text-light p-2">Contributor</h4>
+                            {% elif user.role == 'MODERATOR' %}
+                                <h4 class="badge bg-dark text-light p-2">Moderator</h4>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-center">
-                            <a href="#" class="btn btn-sm btn-outline-dark text-center">Upload</a>
+                    <div class="row mb-5 d-flex justify-content-center">
+                        <div class="card col-6">
+                            <div class="card-body">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="row">
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <div class="mb-5">
+                                                    <img src="{{ profile.image.url }}" alt="" width="100px" height="100px" class="update-image border rounded-circle">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 mb-3">
+                                                <div class="col-12 mb-3">
+                                                    <div class="d-flex justify-content-start">
+                                                        <label for="{{ u_form.image.id_for_label }}" class="form-control-label">{{ u_form.image.label }}</label>
+                                                    </div>
+                                                    {% if u_form.image.errors %}
+                                                        <div class="">{{ u_form.image|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                                        <div class="invalid-feedback">
+                                                            {% for error in u_form.image.errors %}
+                                                                <p>{{ error }}</p>
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="" name="image">{{ u_form.image|add_class:"form-control form-control-sm" }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg mb-3">
+                                            <div class="d-flex justify-content-start">
+                                                <label for="{{ form.usernamefirst_name_for_label }}" class="form-control-label">{{ form.first_name.label }}</label>
+                                            </div>
+                                            {% if form.first_name.errors %}
+                                                <div class="">{{ form.first_name|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.username.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <div>{{ form.first_name|add_class:"form-control form-control-sm" }}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="d-flex justify-content-start">
+                                                <label for="{{ form.last_name.id_for_label }}" class="form-control-label">{{ form.last_name.label }}</label>
+                                            </div>
+                                            {% if form.last_name.errors %}
+                                                <div class="">{{ form.last_name|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.last_name.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <div>{{ form.last_name|add_class:"form-control form-control-sm" }}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <div class="d-flex justify-content-start">
+                                                <label for="{{ form.email.id_for_label }}" class="form-control-label">{{ form.email.label }}</label>
+                                            </div>
+                                            {% if form.email.errors %}
+                                                <div class="">{{ form.email|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.email.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                <div>{{ form.email|add_class:"form-control form-control-sm" }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-outline-dark">Update</button>
+                                </form>
+                            </div>
                         </div>
+                        <div class="col-1"></div>
                     </div>
                 </div>
             </div>
