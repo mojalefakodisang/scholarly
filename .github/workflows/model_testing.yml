@@ -23,15 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Set up environment
-        run: echo "Environment variables set"
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-
       - name: Run tests
         env:
         run: |
@@ -43,9 +34,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME:
+          DB_USER:
+          DB_PASSWORD:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
 
@@ -64,10 +55,10 @@ jobs:
               sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
-              pip install -r requirements.txt
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
+              pip install -r requirements.txt 
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage makemigrations 
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage migrate 
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
             else
               git clone https://github.com/mojalefakodisang/scholarly
@@ -76,9 +67,9 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
-              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage makemigrations 
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage migrate
+              DB_NAME ${{ secrets.DB_NAME }} DB_USER ${{ secrets.DB_USER }} DB_PASSWORD ${{ secrets.DB_PASSWORD }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
             fi
 
