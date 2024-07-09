@@ -5,7 +5,7 @@ from users.utils import send_email
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
-from content.models import Content, ModeratedContent
+from content.models import Content
 from django.contrib.auth.decorators import login_required
 
 
@@ -72,15 +72,12 @@ def approve_content(request, content_id):
 
     content.approved = 'Approved'
     content.save()
-    mod = ModeratedContent(moderator=request.user, content=content)
-    mod.save()
     messages.success(request, 'Content approved successfully')
     return redirect('explore')
 
 @login_required
 def disapprove_content(request, content_id):
     content = Content.objects.get(id=content_id)
-    mod = ModeratedContent.objects.get(content=content)
 
     if content is None:
         messages.warning(request, 'Content not found. Please try again')
@@ -88,6 +85,5 @@ def disapprove_content(request, content_id):
 
     content.approved = 'Not Approved'
     content.save()
-    mod.delete()
     messages.success(request, 'Content disapproved successfully')
     return redirect('explore')

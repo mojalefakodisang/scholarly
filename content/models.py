@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from contributor.models import Contributor
 from student.models import Student
-from moderator.models import Moderator
 
 
 class Category(models.Model):
@@ -31,8 +30,3 @@ class Content(models.Model):
 class SavedContent(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='saved_content')
     content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='saved_content')
-
-
-class ModeratedContent(models.Model):
-    moderator = models.ForeignKey(Moderator, on_delete=models.CASCADE, related_name='moderated_content')
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='moderated_content')
