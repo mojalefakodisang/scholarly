@@ -6,13 +6,13 @@ on:
       - main
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -34,14 +34,23 @@ jobs:
 
       - name: Run tests
         env:
+        run: |
+          python manage.py test
+
+
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-        run: |
-          python manage.py test
 
+
+    steps:
       - name: Deploy to web_server_01
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -56,8 +65,9 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              python3 -m manage makemigrations
-              python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
             else
               git clone https://github.com/mojalefakodisang/scholarly
@@ -66,10 +76,10 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              python3 -m manage makemigrations
-              python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
-              
             fi
 
       - name: Deploy to web_server_02
@@ -86,8 +96,9 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              python3 -m manage makemigrations
-              python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
             else
               git clone https://github.com/mojalefakodisang/scholarly
@@ -96,7 +107,8 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              python3 -m manage makemigrations
-              python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage makemigrations
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage migrate
+              DB_NAME=$DB_NAME DB_USER=$DB_USER DB_PASSWORD=$DB_PASSWORD DB_HOST=$DB_HOST DB_PORT=$DB_PORT python3 -m manage collectstatic --no-input
               sudo systemctl restart scholarly.service
             fi
