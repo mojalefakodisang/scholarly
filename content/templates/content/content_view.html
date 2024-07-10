@@ -74,39 +74,45 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="col-lg-4 col-sm-12">
+                        <div class="col-lg-5 col-sm-12">
                             {% if user == content.user %}
                                 <div class="row">
                                     <div class="col-6">
-                                        <a href="{% url 'content-update' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Update</a>
+                                        <a href="{% url 'content-update' content_id=content.id %}" class="btn btn-sm btn-outline-dark">
+                                            <small>Update</small>
+                                        </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{% url 'content-delete' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Delete</a>
+                                        <a href="{% url 'content-delete' content_id=content.id %}" class="btn btn-sm btn-outline-dark">
+                                            <small>Delete</small>
+                                        </a>
                                     </div>
                                 </div>
                             {% elif user.role == 'MODERATOR' %}
-                                {% if content.approved == 'Approved' %}
-                                    <div class="col-12">
-                                        <h4 class="badge bg-success text-light">Approved</h4>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="{% url 'disapprove' content_id=content.id %}" class="badge btn btn-sm btn-outline-dark">Disapprove content</a>
-                                    </div>
-                                {% elif content.approved == 'Not Approved' %}
-                                    <div class="col-12">
-                                        <h4 class="badge bg-danger text-light">Not Approved</h4>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-xs text-success btn-outline-success">Approve content</a>
-                                    </div>
-                                {% else %}
-                                    <div class="col-12">
-                                        <h4 class="badge bg-warning text-light">Pending</h4>
-                                    </div>
-                                    <div class="col-12">
-                                        <a href="{% url 'approve' content_id=content.id %}" class="badge btn btn-sm text-light bg-success ">Approve content</a>
-                                    </div>
-                                {% endif %}
+                                <div class="row">
+                                    {% if content.approved == 'Approved' %}
+                                        <div class="col-12">
+                                            <h4 class="badge bg-success text-light">Approved</h4>
+                                        </div>
+                                        <div class="col-12">
+                                            <a href="{% url 'disapprove' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Disapprove content</a>
+                                        </div>
+                                    {% elif content.approved == 'Not Approved' %}
+                                        <div class="col-12">
+                                            <h4 class="badge bg-danger text-light">Not Approved</h4>
+                                        </div>
+                                        <div class="col-12">
+                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve content</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-12">
+                                            <h4 class="badge bg-warning text-light">Pending</h4>
+                                        </div>
+                                        <div class="col-12">
+                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve content</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             {% else %}
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-center align-items-center ">

@@ -66,10 +66,11 @@ def explore(request):
 
     context = {
         'path': request.path,
-        'contributors': contributors,
+        'c_profiles': contributors,
         'contents': contents,
         'profile': profile,
-        'saved': saved
+        'saved': saved,
+        'student_content': [c for c in contents if c.approved == 'Approved']
     }
 
     return render(request, 'content/explore.html', context=context)

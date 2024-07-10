@@ -53,6 +53,7 @@ def dashboard(request):
     tasks = []
     notifications = []
     empty_ = ['', None]
+    contributor_profiles = ContributorProfile.objects.all()
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
 
@@ -62,6 +63,16 @@ def dashboard(request):
         profile = ContributorProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'MODERATOR':
         profile = ModeratorProfile.objects.filter(user=request.user).first()
+
+    if request.user.role == 'MODERATOR':
+        moderated = ModeratedContent.objects.filter(moderator=request.user).order_by('-content').first()
+        for c in Content.objects.all():
+            if c.approved != 'Approved':
+                t_count += 1
+        if t_count > 0:
+            tasks.append(f'You have {t_count} contents to moderate')
+    else:
+        moderated = None
 
     reviews = Review.objects.all()
     review = Review.objects.filter(student=request.user).first()
@@ -93,7 +104,9 @@ def dashboard(request):
         'tasks': tasks,
         'notifications': notifications,
         'saved': saved,
-        'latest_content': content[0] if content != None else None
+        'c_profiles': contributor_profiles,
+        'latest_content': content[0] if content != None else None,
+        'moderated': moderated
     }
 
     return render(request, 'users/dashboard.html', context=context)

@@ -81,20 +81,37 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    transition: bright infinite ease-in-out;
-    animation: bright 1.5s infinite;
+    background-color: skyblue;
+    transition: 0.5s infinite ease-in-out;
+    animation: bright 2s infinite;
+}
+
+.not-live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    transition: 0.5s infinite ease-in-out;
+    animation: bright 2s infinite;
+}
+
+.live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+    transition: 0.5s infinite ease-in-out;
+    animation: bright 2s infinite;
 }
 
 @keyframes bright {
     from {
         opacity: 0.5;
-        transform: scale(0.9);
-        background-color: skyblue;
+        transform: scale(0.5);
     }
     to {
         opacity: 1;
         transform: scale(1.0);
-        background-color: #75b2dd;
     }
 }
 
