@@ -79,6 +79,13 @@ def dashboard(request):
     content = Content.objects.filter(user=request.user)
     saved = SavedContent.objects.filter(student_id=request.user.id).order_by('-content').first()
 
+    """Statistics"""
+    l_content = Content.objects.filter(user=request.user).order_by('-created_at').first()
+    no_reviews = len(Review.objects.filter(content=l_content).all())
+    bookmarks = len(SavedContent.objects.filter(content=l_content).all())
+    r_list = [r.rating for r in Review.objects.filter(content=l_content).all()]
+    avg_rating = sum(r_list) / len(r_list) if len(r_list) > 0 else 0
+
     for con in content:
         for rev in reviews:
             if rev.content == con:
@@ -94,6 +101,9 @@ def dashboard(request):
         tasks = None
 
     context = {
+        'bookmarks': bookmarks,
+        'no_reviews': no_reviews,
+        'avg_rating': avg_rating,
         'user': request.user,
         'path': request.path,
         'title': 'Dashboard',
