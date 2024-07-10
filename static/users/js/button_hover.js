@@ -1,13 +1,10 @@
-$(".add-btn").hover(function() {
-    $(this).append("<p>Add Content</p>");
-    $(this).addClass("add-btn");
-}, function() {
-    $(this).find("p").remove();
-});
-
-$(".add-review-btn").hover(function() {
-    $(this).append("<p>Add Review</p>");
-    $(this).addClass("add-btn-animate");
-}, function() {
-    $(this).find("p").remove();
+$(document).ready(function() {
+    $("input[type='radio']").hover(
+        function() {
+            $(this).next('label').css('opacity', '0.5')
+        },
+        function() {
+            $(this).next('label').css('opacity', '1')
+        },
+    )
 });
