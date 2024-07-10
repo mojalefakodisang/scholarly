@@ -52,6 +52,8 @@ jobs:
             if [ -d "scholarly" ]; then
               cd scholarly
               git pull origin main
+              git pull origin main
+              git pull --all
               sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
