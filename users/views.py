@@ -209,12 +209,8 @@ def update_user(request, username):
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.email = form.cleaned_data['email']
-            instance = u_form.save(commit=False)
-            instance.image = request.FILES.get('image')
-            instance.save()
+            u_form.save()
             user.save()
-            print(instance.image.path)
-            print(instance.image.url)
             messages.success(request, 'User information updated successfully')
             return redirect('dashboard')
         else:

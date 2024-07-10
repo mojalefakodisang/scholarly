@@ -30,7 +30,7 @@ def register(request):
             profile = ModeratorProfile(user=user, token=token)
             profile.save()
             subject = 'Account Validation'
-            message = f'Please click the link below to validate your account:\n\n{request.build_absolute_uri("/validate/")}?token={token}'
+            message = f'Please click the link below to validate your account:\n\nhttps://scholarlyonline.live/validate/?token={token}'
 
             send_email(dest=email, subject=subject, body=message)
             messages.success(request, 'Email sent to validate your account. Please check your email to continue')
