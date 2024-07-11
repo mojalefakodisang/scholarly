@@ -72,8 +72,8 @@ def explore(request):
             if c.approved == 'Approved':
                 student_content.append(c)
 
-    if len(student_content) == 0:
-        student_content = None
+        if len(student_content) == 0:
+            student_content = None
 
     context = {
         'path': request.path,
