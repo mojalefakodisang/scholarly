@@ -104,6 +104,13 @@
     animation: bright 2s infinite;
 }
 
+.read {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid skyblue;
+}
+
 @keyframes bright {
     from {
         opacity: 0.5;
@@ -113,14 +120,6 @@
         opacity: 1;
         transform: scale(1.0);
     }
-}
-
-.navbar {
-    background: linear-gradient(
-        top,
-        white,
-        transparent
-    ) !important;
 }
 
 .content-profile-card {
@@ -169,3 +168,4 @@
 .reviews::-webkit-scrollbar {
     display: none;
 }
+

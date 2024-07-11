@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-12 col-md-12" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
             <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
-                <div class="col-lg-11 col-md-12 col-sm-12 container main">
+                <div class="col-lg-12 col-md-12 col-sm-12 container main">
                     <div class="row mb-5">
                         <div class="col-12 mb-2">
                             {% if messages %}
@@ -23,17 +23,19 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <div class="col-10">
-                            <h1>Update information</h1>
-                        </div>
-                        <div class="col-2">
-                            {% if user.role == 'STUDENT' %}
-                                <h4 class="badge bg-primary text-light p-2">Student</h4>
-                            {% elif user.role == 'CONTRIBUTOR' %}
-                                <h4 class="badge bg-dark text-light p-2">Contributor</h4>
-                            {% elif user.role == 'MODERATOR' %}
-                                <h4 class="badge bg-dark text-light p-2">Moderator</h4>
-                            {% endif %}
+                        <div class="row">
+                            <div class="col-10">
+                                <h1>Update information</h1>
+                            </div>
+                            <div class="col-2">
+                                {% if user.role == 'STUDENT' %}
+                                    <h4 class="badge bg-primary text-light p-2">Student</h4>
+                                {% elif user.role == 'CONTRIBUTOR' %}
+                                    <h4 class="badge bg-dark text-light p-2">Contributor</h4>
+                                {% elif user.role == 'MODERATOR' %}
+                                    <h4 class="badge bg-dark text-light p-2">Moderator</h4>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-5 d-flex justify-content-center">

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
 from review.forms import CreateReview
+from users.models import User
 
 
 @login_required
@@ -215,3 +216,17 @@ def unsave_content(request, content_id, saved_id):
     existing.delete()
     messages.success(request, 'Content unsaved successfully')
     return redirect('explore')
+
+@login_required
+def contributor_content(request, username):
+    user = User.objects.filter(username=username).first()
+    contents = Content.objects.filter(user=user).all()
+
+    profile = ContributorProfile.objects.filter(user=request.user).first()
+
+    context = {
+        'profile': profile,
+        'contents': contents
+    }
+
+    return render(request, 'content/contr_content.html', context=context)

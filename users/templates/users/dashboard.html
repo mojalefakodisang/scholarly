@@ -45,7 +45,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-3 col-sm-3 col-md-13 col-lg-3 col-xl-3 d-sm-flex d-lg-flex justify-content-sm-end justify-content-lg-end">
-                                                <a href="#" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
+                                                <a href="{% url 'all-notifications' %}" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right" style="color: var(--bs-emphasis-color);">
                                                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
                                                     </svg>
@@ -54,7 +54,6 @@
                                         </div>
                                         <div class="row">
                                         {% if notifications %}
-                                            {% for notif in notifications %}
                                                 <div class="col-lg-12" style="margin-bottom: 10px;">
                                                     <div class="card">
                                                         <div class="card-body">
@@ -68,13 +67,12 @@
                                                                     <span class="not-icon"></span>
                                                                 </div>
                                                                 <div class="col-10 col-sm-10 col-md-10 col-lg-10 d-md-flex d-lg-flex align-items-md-center align-items-lg-center" style="height: 52px;">
-                                                                    <small class="d-md-flex d-lg-flex align-items-md-center align-items-lg-center">{{ notif }}</small>
+                                                                    <small class="d-md-flex d-lg-flex align-items-md-center align-items-lg-center">{{ notifications }}</small>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            {% endfor %}
                                             <div class="d-flex justify-content-center justify-content-lg-start" style="margin: 10px 0 0;margin-top: 11px;height: 20;">
                                                 <div class="row">
                                                     <div class="col-lg-12">
@@ -182,7 +180,7 @@
                                                     <h4>Latest Content</h4>
                                                 </div>
                                                 <div class="col-6 col-sm-3 col-md-3 col-lg-3 d-lg-flex justify-content-lg-end">
-                                                    <a href="#" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right" style="color: var(--bs-emphasis-color);">
+                                                    <a href="{% url 'contributor-content' username=user.username %}" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right" style="color: var(--bs-emphasis-color);">
                                                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
                                                         </svg>
                                                     </a>
@@ -350,7 +348,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-3 col-sm-3 col-md-13 col-lg-3 col-xl-3 d-sm-flex d-lg-flex justify-content-sm-end justify-content-lg-end">
-                                                            <a href="#" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
+                                                            <a href="{% url 'all-notifications' %}" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right" style="color: var(--bs-emphasis-color);">
                                                                     <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
                                                                 </svg>
@@ -572,7 +570,7 @@
                         <div class="row" style="margin-bottom: -34px;">
                             <!-- Notifications -->
                             <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
-                                            <div class="card main-card">
+                                <div class="card main-card">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
@@ -585,7 +583,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-3 col-sm-3 col-md-13 col-lg-3 col-xl-3 d-sm-flex d-lg-flex justify-content-sm-end justify-content-lg-end">
-                                                            <a href="#" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
+                                                            <a href="{% url 'all-notifications' %}" style="color: var(--bs-emphasis-color);"><span style="color: rgb(0, 0, 0);">Show all&nbsp;</span>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrow-right" style="color: var(--bs-emphasis-color);">
                                                                     <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
                                                                 </svg>
@@ -637,7 +635,7 @@
                                                     {% endif %}
                                                     </div>
                                                 </div>
-                                            </div>
+                                </div>
                             </div>
                             <!-- Tasks -->
                             <div class="col" style="margin: 12px 0;">

@@ -40,6 +40,7 @@ urlpatterns = [
     path("reset_password/<str:username>/<str:token>/",
          user_views.reset_password, name='reset_password'),
     path("validate/", mod_views.validate, name='validate-token'),
+    path("notifications/", include("notifications.urls")),
 ]
 
 if settings.DEBUG:

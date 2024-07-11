@@ -60,8 +60,8 @@ jobs:
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
-              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
-              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
+              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
+              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
               sudo systemctl restart scholarly.service
             fi
 

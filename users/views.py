@@ -17,6 +17,8 @@ from contributor.models import ContributorProfile
 from contributor.forms import UpdateImageForm as ContrImageForm
 from student.forms import UpdateImageForm as StudImageForm
 from moderator.forms import UpdateImageForm as ModImageForm
+from notifications.models import Notifications
+from notifications.views import create_notifications
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 
@@ -60,6 +62,7 @@ def dashboard(request):
     if request.user.role == 'STUDENT':
         profile = StudentProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'CONTRIBUTOR':
+        create_notifications(request)
         profile = ContributorProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'MODERATOR':
         profile = ModeratorProfile.objects.filter(user=request.user).first()
@@ -86,14 +89,11 @@ def dashboard(request):
     r_list = [r.rating for r in Review.objects.filter(content=l_content).all()]
     avg_rating = sum(r_list) / len(r_list) if len(r_list) > 0 else 0
 
-    for con in content:
-        for rev in reviews:
-            if rev.content == con:
-                count += 1
-        if count == 0:
-            notifications = None
-        else:
-            notifications.append(f'You have {count} reviews for {con.title}')
+    notifications = Notifications.objects.filter(user=request.user).order_by('-created_at').first()
+    if notifications and notifications.read == False:
+        not_ = notifications.title
+    else:
+        not_ = None
 
     if len(content) == 0:
         content = None
@@ -112,10 +112,10 @@ def dashboard(request):
         'content': content,
         'review': review,
         'tasks': tasks,
-        'notifications': notifications,
+        'notifications': not_,
         'saved': saved,
         'c_profiles': contributor_profiles,
-        'latest_content': content[0] if content != None else None,
+        'latest_content': l_content if l_content != None else None,
         'moderated': moderated
     }
 
