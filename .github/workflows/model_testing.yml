@@ -53,6 +53,7 @@ jobs:
               cp -r scholarly/media .
               rm -rf scholarly
               git clone https://github.com/mojalefakodisang/scholarly
+              rm -rf scholarly/media
               mv ./media scholarly
               cd scholarly
               sudo apt-get install -y python3.8-venv
