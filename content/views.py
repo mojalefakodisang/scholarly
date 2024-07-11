@@ -65,9 +65,12 @@ def explore(request):
         profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     student_content = []
-    for c in contents:
-        if c.approved == 'Approved':
-            student_content.append(c)
+    if contents is None:
+        student_content = None
+    else:
+        for c in contents:
+            if c.approved == 'Approved':
+                student_content.append(c)
 
     if len(student_content) == 0:
         student_content = None
