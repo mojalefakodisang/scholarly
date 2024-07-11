@@ -64,13 +64,21 @@ def explore(request):
     elif request.user.role == 'MODERATOR':
         profile = ModeratorProfile.objects.filter(user=request.user).first()
 
+    student_content = []
+    for c in contents:
+        if c.approved == 'Approved':
+            student_content.append(c)
+
+    if len(student_content) == 0:
+        student_content = None
+
     context = {
         'path': request.path,
         'c_profiles': contributors,
         'contents': contents,
         'profile': profile,
         'saved': saved,
-        'student_content': [c for c in contents if c.approved == 'Approved']
+        'student_content': student_content
     }
 
     return render(request, 'content/explore.html', context=context)
