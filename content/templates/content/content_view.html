@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="col-lg-5 col-sm-12">
+                        <div class="col-lg-8 col-sm-12">
                             {% if user == content.user %}
                                 <div class="row">
                                     <div class="col-6">
@@ -95,21 +95,24 @@
                                             <h4 class="badge bg-success text-light">Approved</h4>
                                         </div>
                                         <div class="col-12">
-                                            <a href="{% url 'disapprove' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Disapprove content</a>
+                                            <a href="{% url 'disapprove' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Disapprove</a>
                                         </div>
                                     {% elif content.approved == 'Not Approved' %}
                                         <div class="col-12">
                                             <h4 class="badge bg-danger text-light">Not Approved</h4>
                                         </div>
                                         <div class="col-12">
-                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve content</a>
+                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve</a>
                                         </div>
                                     {% else %}
                                         <div class="col-12">
                                             <h4 class="badge bg-warning text-light">Pending</h4>
                                         </div>
-                                        <div class="col-12">
-                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve content</a>
+                                        <div class="col-6">
+                                            <a href="{% url 'approve' content_id=content.id %}" class="btn btn-sm btn-outline-success">Approve</a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{% url 'disapprove' content_id=content.id %}" class="btn btn-sm btn-outline-dark">Disapprove</a>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -191,7 +194,7 @@
                                                         <p class="card-title mb-0">{{ r.student.username }}</p>
                                                         <small class="text-muted">{{ r.student.email }}</small>
                                                     </div>
-                                                    {% if r.student == request.user %}
+                                                    {% if r.student == user %}
                                                         <div class="col-2">
                                                             <a href="{% url 'view-review' review_id=r.id content_id=content.id %}" class="btn btn-sm btn-outline-dark">View</a>
                                                         </div>

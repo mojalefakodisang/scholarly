@@ -38,12 +38,9 @@
                                             <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
                                                 <div style="width: fit-content;">
                                                     <div class="row">
-                                                        <div class="col-lg-10">
+                                                        <div class="col-lg-12">
                                                             <h4>Notifications</h4>
                                                         </div>
-                                                        <div class="col-sm-2 col-md-2 col-lg-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-9-circle-fill">
-                                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8.223 4.146c2.104 0 3.123-1.464 3.123-4.3 0-3.147-1.459-4.014-2.97-4.014-1.63 0-2.871 1.02-2.871 2.73 0 1.706 1.171 2.667 2.566 2.667 1.06 0 1.7-.557 1.934-1.184h.076c.047 1.67-.475 3.023-1.834 3.023-.71 0-1.149-.363-1.248-.72H5.258c.094.908.926 1.798 2.52 1.798Zm.118-3.972c.808 0 1.535-.528 1.535-1.594s-.668-1.676-1.56-1.676c-.838 0-1.517.616-1.517 1.659 0 1.072.708 1.61 1.54 1.61Z"></path>
-                                                            </svg></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -333,13 +330,13 @@
                     </div>
                 {% elif user.role == 'STUDENT' %}
                     
-                                        <div class="col-lg-2"><span class="badge bg-primary">Student</span></div>
-                                    </div>
-                                </div>
-                                <div style="margin: 30px 0px 0px;margin-top: 36px;">
-                                    <div class="row" style="margin-bottom: -34px;">
-                                        <!-- Notifications -->
-                                        <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
+                            <div class="col-lg-2"><span class="badge bg-primary">Student</span></div>
+                        </div>
+                    </div>
+                    <div style="margin: 30px 0px 0px;margin-top: 36px;">
+                        <div class="row" style="margin-bottom: -34px;">
+                            <!-- Notifications -->
+                            <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
                                             <div class="card main-card">
                                                 <div class="card-body">
                                                     <div class="row">
@@ -404,9 +401,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Tasks -->
-                                        <div class="col" style="margin: 12px 0;">
+                            </div>
+                            <!-- Tasks -->
+                            <div class="col" style="margin: 12px 0;">
                                             <div class="card main-card">
                                                 <div class="card-body">
                                                     <div class="row">
@@ -463,11 +460,11 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Saved content -->
-                                <div style="margin: 30px 0px 0px;margin-top: 36px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Saved content -->
+                    <div style="margin: 30px 0px 0px;margin-top: 36px;">
                                     <div class="row d-lg-flex justify-content-lg-end">
                                         <div class="col-lg-12 col-xl-12" style="margin: 12px 0;margin-top: 0px;">
                                             <div class="card main-card">
@@ -565,28 +562,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>            
+                    </div>            
                             
                 {% elif user.role == 'MODERATOR' %}
-                                        <div class="col-lg-2"><span class="badge bg-dark">Moderator</span></div>
-                                    </div>
-                                </div>
-                                <div style="margin: 30px 0px 0px;margin-top: 36px;">
-                                    <div class="row" style="margin-bottom: -34px;">
-                                        <!-- Notifications -->
-                                        <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
+                            <div class="col-lg-2"><span class="badge bg-dark">Moderator</span></div>
+                        </div>
+                    </div>
+                    <div style="margin: 30px 0px 0px;margin-top: 36px;">
+                        <div class="row" style="margin-bottom: -34px;">
+                            <!-- Notifications -->
+                            <div class="col col-12 col-lg-6 col-xl-6 col-xxl-6" style="margin: 12px 0;">
                                             <div class="card main-card">
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">
                                                             <div style="width: fit-content;">
                                                                 <div class="row">
-                                                                    <div class="col-lg-10">
+                                                                    <div class="col-lg-12">
                                                                         <h4>Notifications</h4>
                                                                     </div>
-                                                                    <div class="col-sm-2 col-md-2 col-lg-2"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-9-circle-fill">
-                                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8.223 4.146c2.104 0 3.123-1.464 3.123-4.3 0-3.147-1.459-4.014-2.97-4.014-1.63 0-2.871 1.02-2.871 2.73 0 1.706 1.171 2.667 2.566 2.667 1.06 0 1.7-.557 1.934-1.184h.076c.047 1.67-.475 3.023-1.834 3.023-.71 0-1.149-.363-1.248-.72H5.258c.094.908.926 1.798 2.52 1.798Zm.118-3.972c.808 0 1.535-.528 1.535-1.594s-.668-1.676-1.56-1.676c-.838 0-1.517.616-1.517 1.659 0 1.072.708 1.61 1.54 1.61Z"></path>
-                                                                        </svg></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -644,9 +638,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- Tasks -->
-                                        <div class="col" style="margin: 12px 0;">
+                            </div>
+                            <!-- Tasks -->
+                            <div class="col" style="margin: 12px 0;">
                                             <div class="card main-card">
                                                 <div class="card-body">
                                                     <div class="row">
@@ -703,11 +697,11 @@
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Moderated content -->
-                                <div style="margin: 30px 0px 0px;margin-top: 36px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Moderated content -->
+                    <div style="margin: 30px 0px 0px;margin-top: 36px;">
                                     <div class="row d-lg-flex justify-content-lg-end">
                                         <div class="col-lg-12 col-xl-12" style="margin: 12px 0;margin-top: 0px;">
                                             <div class="card main-card">
@@ -753,7 +747,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-xl-12 d-flex d-sm-flex d-md-flex d-lg-flex justify-content-end justify-content-sm-end justify-content-md-end justify-content-lg-end justify-content-xl-end justify-content-xxl-end">
-                                                                            <button class="btn btn-primary" type="button">Read article</button></div>
+                                                                            <a href="{% url 'content-view' content_id=moderated.content.id %}" class="btn btn-sm bg-primary text-light" >Read Article</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -799,7 +794,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                    </div>
                 {% endif %}
             </div>
         </div>

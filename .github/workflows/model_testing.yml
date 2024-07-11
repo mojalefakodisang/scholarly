@@ -50,25 +50,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             if [ -d "scholarly" ]; then
+              cp -r scholarly/media .
+              rm -rf scholarly
+              git clone https://github.com/mojalefakodisang/scholarly
+              mv ./media scholarly
               cd scholarly
-              git pull origin main
-              git pull origin main
-              git pull --all
               sudo apt-get install -y python3.8-venv
               python3 -m venv venv
               source venv/bin/activate
               pip install -r requirements.txt
               DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
               DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
-              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage collectstatic --no-input
-              sudo systemctl restart scholarly.service
-            else
-              git clone https://github.com/mojalefakodisang/scholarly
-              cd scholarly
-              sudo apt-get install -y python3.8-venv
-              python3 -m venv venv
-              source venv/bin/activate
-              pip install -r requirements.txt
               sudo systemctl restart scholarly.service
             fi
 
