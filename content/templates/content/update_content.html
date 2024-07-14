@@ -1,10 +1,10 @@
 {% extends 'users/main.html' %}
-{% load crispy_forms_tags %}
+{% load form_tags %}
 {% block main %}
     <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
         <div class="row mb-5">
             <div class="col-10">
-                <h4>Update content</h4>
+                <h4>Create a new content</h4>
             </div>
             <div class="col-2">
                 {% if user.role == 'CONTRIBUTOR' %}
@@ -12,8 +12,8 @@
                 {% endif %}
             </div>
         </div>
-        <div class="row mb-5">
-            <div class="col-lg-5">
+        <div class="row">
+            <div class="col-lg-5 mb-5">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">What makes a content?</h6>
@@ -27,8 +27,79 @@
                         <div class="content">
                             <form method="POST" class="mb-3">
                                 {% csrf_token %}
-                                {{ form|crispy }}
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.title_for_label }}" class="form-control-label">{{ form.title.label }}</label>
+                                        </div>
+                                        {% if form.title.errors %}
+                                            <div class="">{{ form.title|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.title.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>{{ form.title|add_class:"form-control form-control-sm" }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.description_for_label }}" class="form-control-label">{{ form.description.label }}</label>
+                                        </div>
+                                        {% if form.description.errors %}
+                                            <div class="">{{ form.description|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.description.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>{{ form.description|add_class:"form-control form-control-sm" }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.categories_str_for_label }}" class="form-control-label">{{ form.categories_str.label }}</label>
+                                        </div>
+                                        {% if form.categories_str.errors %}
+                                            <div class="">{{ form.categories_str|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.categories_str.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                {{ form.categories_str|add_class:"form-control form-control-sm" }}
+                                                
+                                                {% if form.categories_str %}
+                                                    {% for category in form.categories_str.value %}
+                                                        <span class="badge bg-dark">{{ category }}</span>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span class="badge bg-dark">No category</span>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+                                        <div class="d-flex justify-content-start">
+                                            <label for="{{ form.content_for_label }}" class="form-control-label">{{ form.content.label }}</label>
+                                        </div>
+                                        {% if form.description.errors %}
+                                            <div class="">{{ form.content|add_class:"form-control form-control-sm is-invalid" }}</div>
+                                            <div class="invalid-feedback">
+                                                {% for error in form.content.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div>{{ form.content|add_class:"form-control form-control-sm" }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add content</button>
                             </form>
                         </div>
                     </div>
