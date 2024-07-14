@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">  
-                            <div class="col-2 content-profile d-flex justify-content-center">
+                            <div class="col-2 content-profile text-center">
                                 {% for contr in contributors %}
                                     {% if contr.user.username == content.user.username %}
                                         <img src="{{ contr.image.url }}" alt="" class="rounded-circle" width="100px">
@@ -155,12 +155,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 container pb-5 border-bottom mb-3">
+                        <div class="col-12 container pb-5 border-bottom mb-3 mt-5">
+                            <h5>Description</h5>
+                            <p class="text-muted">{{ content.description }}</p>
                             <small><div class="col-12">
                                 <p class="text-muted">{{ content.created_at }}</p>
                             </div></small>
-                            <h5>Description</h5>
-                            <p class="text-muted">{{ content.description }}</p>
+                            <div class="mb-2 mt-2">
+                                {% for cat in categories %}
+                                    <span class="badge bg-dark">{{ cat }}</span>
+                                {% endfor %}
+                            </div>
                         </div>
                         <div class="col-12 container pb-5 mb-3">
                             <p>{{ content.content }}</p>
@@ -344,7 +349,7 @@
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                <div>{{ form.rating|add_class:"d-flex justify-content-evenly" }}</div>
+                                <div>{{ form.rating|add_class:"d-flex justify-content-evenly star" }}</div>
                             {% endif %}
                         </div>
                         <button type="submit" class="btn btn-sm btn-outline-dark">Submit</button>

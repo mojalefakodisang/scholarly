@@ -25,6 +25,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    path("", include("main.urls")),
     path("admin/", admin.site.urls),
     path("u/", include("users.urls")),
     path("review/", include("review.urls")),

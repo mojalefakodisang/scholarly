@@ -6,10 +6,14 @@ from student.models import Student
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, default='Other')
+    name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f'Category: {self.name}'
+        return f'{self.name}'
+
+    def save(self, *args, **kwargs):
+        values = self.name.split()
+        super().save(*args, **kwargs)
 
 
 class Content(models.Model):
@@ -18,14 +22,26 @@ class Content(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(Contributor, on_delete=models.CASCADE, related_name='contents')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='contents', default=None)
+    categories_str = models.CharField(max_length=255, default='')
+    categories = models.ManyToManyField(Category, related_name='contents')
     approved = models.CharField(max_length=20, choices=[('Approved', 'Approved'),
                                                         ('Not Approved', 'Not Approved'),
                                                         ('Pending', 'Pending')],
                                                         default='Pending')
 
     def __str__(self):
-        return f"Content: {self.user} - {self.description} - {self.status}"
+        return f"Content: {self.user} - {self.description} - {self.approved}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cat_list = [category.strip() for category in self.categories_str.split(',')]
+
+        for name in cat_list:
+            category, created = Category.objects.get_or_create(name=name)
+            category.save()
+            self.categories.add(category)
+
+
 
 
 class SavedContent(models.Model):

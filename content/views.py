@@ -3,7 +3,7 @@ from django.contrib import messages
 from student.models import StudentProfile
 from .models import Content, SavedContent
 from django.shortcuts import render, redirect
-from .forms import CreateContent, UpdateContent, CreateCategoryForm
+from .forms import CreateContent, UpdateContent
 from django.contrib.auth.decorators import login_required
 from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
@@ -25,9 +25,9 @@ def create_content(request):
             title = form.cleaned_data['title']
             description = form.cleaned_data['description']
             content = form.cleaned_data['content']
-            category = form.cleaned_data['category']
+            categories = form.cleaned_data['categories_str']
 
-            cont = Content(user=request.user, category=category,
+            cont = Content(user=request.user, categories_str=categories,
                            title=title,
                            description=description,
                            content=content)
@@ -93,6 +93,7 @@ def content_view(request, content_id):
     contributors = ContributorProfile.objects.all()
     reviews = Review.objects.filter(content=content).all()
     saved = SavedContent.objects.filter(content=content_id, student=request.user).first()
+    categories = content.categories.all()
 
     if content is None:
         messages.warning(request, 'Content not found')
@@ -130,11 +131,12 @@ def content_view(request, content_id):
 
     context = {
         'contributors': contributors,
+        'categories': categories,
+        'path': request.path,
         'content': content,
         'profile': profile,
         'reviews': reviews,
         'saved': saved,
-        'path': request.path,
         'form': form
     }
 
@@ -157,7 +159,7 @@ def content_update(request, content_id):
             content.title = form.cleaned_data['title']
             content.description = form.cleaned_data['description']
             content.content = form.cleaned_data['content']
-            content.category = form.cleaned_data['category']
+            content.categories_str = form.cleaned_data['categories_str']
             content.approve = 'Pending'
             content.save()
 

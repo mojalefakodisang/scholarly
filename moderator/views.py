@@ -5,6 +5,7 @@ from users.utils import send_email
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
+from users.models import User as u_User
 from content.models import Content, ModeratedContent
 from django.contrib.auth.decorators import login_required
 
@@ -15,12 +16,23 @@ def register(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password1')
+            password1 = form.cleaned_data.get('password1')
+            password2 = form.cleaned_data.get('password2')
+            
+            if u_User.objects.filter(email=email).exists():
+                messages.warning(request, 'Email is already taken')
+                return redirect('mod-register')
+            if u_User.objects.filter(username=username).exists():
+                messages.warning(request, 'Username is already taken')
+                return redirect('mod-register')
+            if password1 != password2:
+                messages.warning(request, 'Passwords does not match, please try again')
+                return redirect('mod-register')
             
             user = Moderator.objects.create_user(
                 username=username,
                 email=email,
-                password=password
+                password=password1
             )
             user.is_active = False
             user.save()

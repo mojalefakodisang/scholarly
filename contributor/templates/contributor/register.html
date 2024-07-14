@@ -9,6 +9,13 @@
                 <div class="col-md-6 col-sm-6 col-lg-8 col-xl-8">
                     <div class="card mb-5">
                         <div class="card-body d-flex flex-column align-items-center">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        <small>{{ message }}</small>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             <div class="bs-icon-xl bs-icon-circle bs-icon-primary bs-icon my-4">
                                 <div class="d-lg-block d-none">
                                     <img src="{% static 'users/img/scholarly_horizontal-01.png' %}" alt="" class="logo-horizontal">

@@ -1,8 +1,12 @@
 __pycache__
 
+*.json
+
 venv
 
 Source
+
+node_modules
 
 media/contr_pics/*
 

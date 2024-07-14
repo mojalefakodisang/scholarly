@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "review",
     "content",
     "student",
-    "category",
     "contributor",
     "moderator",
     "notifications",
