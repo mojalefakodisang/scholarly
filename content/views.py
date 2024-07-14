@@ -7,7 +7,7 @@ from .forms import CreateContent, UpdateContent
 from django.contrib.auth.decorators import login_required
 from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
-from review.forms import CreateReview
+from review.forms import CreateReview, UpdateReview
 from users.models import User
 
 

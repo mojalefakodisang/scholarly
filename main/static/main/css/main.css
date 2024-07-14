@@ -1,0 +1,17 @@
+:root {
+    --bg-primary: #ad9ed3 !important;
+    --bg-secondary: #44235e !important;
+}
+
+.navbar {
+    background: linear-gradient(
+        180deg,
+        white 50%,
+        transparent 80%
+    );
+}
+    
+h1 {
+    color: var(--bg-primary);
+    font-weight: 600;
+}

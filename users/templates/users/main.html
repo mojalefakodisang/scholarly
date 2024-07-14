@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'users/css/auth_base.css' %}">
     <link rel="stylesheet" href="{% static 'users/css/icons_img.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
     <link rel="icon" href="{% static 'users/img/scholarly_favicon-01.png' %}" type="image/x-icon">
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-md fixed-top bg-body border-1 py-3" data-bs-theme="light" style="box-shadow: inset 0px 0px;">
+        <nav class="navbar navbar-expand-md fixed-top border-1 py-3" data-bs-theme="light" style="box-shadow: inset 0px 0px;">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{% url 'explore' %}">
                     <img class="d-none d-lg-block d-md-block d-xl-block d-xxl-block logo-horizontal" src="{% static 'users/img/scholarly_horizontal-01.png' %}">

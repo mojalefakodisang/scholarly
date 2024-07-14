@@ -39,7 +39,13 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-4 d-lg-flex justify-content-lg-center align-items-lg-center " style="display: flex;">
-                                                            <img class="border rounded-circle card-profile-pic" alt="" src="{{ profile.image.url }}">
+                                                            {% for contr in contributors %}
+                                                                {% if contr.user == content.user %}
+                                                                    <img class="border rounded-circle card-profile-pic" alt="" src="{{ contr.image }}">
+                                                                {% else %}
+                                                                <img class="border rounded-circle card-profile-pic" alt="" src="{{ profile.image.url }}">
+                                                                {% endif %}
+                                                            {% endfor %}
                                                         </div>
                                                         <div class="col">
                                                             <div>

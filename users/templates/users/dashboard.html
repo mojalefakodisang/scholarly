@@ -503,7 +503,7 @@
                                                                                             </div>
                                                                                             <div class="col-lg-12">
                                                                                                 <p class="text-muted" style="margin-bottom: 0px;">{{ saved.content.user.email }}</p>
-                                                                                                <p class="text-muted">{{ saved.content.saved.created_at }}</p>
+                                                                                                <p class="text-muted">{{ saved.content.created_at }}</p>
                                                                                             </div>
                                                                                         </div>
                                                                                         <h6>{{ saved.content.title }}</h6>
@@ -513,7 +513,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-xl-12 d-flex d-sm-flex d-md-flex d-lg-flex justify-content-end justify-content-sm-end justify-content-md-end justify-content-lg-end justify-content-xl-end justify-content-xxl-end">
-                                                                            <a href="{% url 'content-view' content_id=saved.id %}" class="btn btn-sm bg-primary text-light">Read Article</a>
+                                                                            <a href="{% url 'content-view' content_id=saved.content.id %}" class="btn btn-sm bg-primary text-light">Read Article</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>

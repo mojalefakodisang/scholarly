@@ -71,10 +71,10 @@
                                             </div>
                                         {% else %}
                                             <div>
-                                                {{ form.categories_str|add_class:"form-control form-control-sm" }}
+                                                {{ form.categories_str|add_class:"form-control form-control-sm mb-2" }}
                                                 
                                                 {% if form.categories_str %}
-                                                    {% for category in form.categories_str.value %}
+                                                    {% for category in form.categories_str.value|split:"," %}
                                                         <span class="badge bg-dark">{{ category }}</span>
                                                     {% endfor %}
                                                 {% else %}
@@ -99,7 +99,7 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Add content</button>
+                                <button type="submit" class="btn btn-primary">Update content</button>
                             </form>
                         </div>
                     </div>
