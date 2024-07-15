@@ -1,10 +1,10 @@
 {% extends 'users/main.html' %}
 {% load form_tags %}
 {% block main %}
-    <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
+    <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
         <div class="row mb-5">
             <div class="col-10">
-                <h4>Create a new content</h4>
+                <h4 class="text-light">Create a new content</h4>
             </div>
             <div class="col-2">
                 {% if user.role == 'CONTRIBUTOR' %}
@@ -17,6 +17,43 @@
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">What makes a content?</h6>
+                        <div class="row pt-4 border-top">
+                            <div class="col-12">
+                                <p>
+                                    Clear and Concise: Information should be presented in a straightforward and easily understandable manner.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Organized: Structured logically with headings, subheadings, bullet points, and numbered lists to guide the reader.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Engaging: Written in an engaging style that maintains the reader's interest, using examples, anecdotes, and rhetorical questions.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Accurate: Factually correct and up-to-date, with references to credible sources.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Comprehensive: Covers the topic thoroughly, addressing different aspects and providing a complete understanding.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Interactive: Incorporates questions, exercises, and prompts for reflection to involve the reader actively.
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Relevant: Tailored to the audience's needs and interests, using language and examples appropriate for their level of knowledge and experience.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +97,7 @@
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
                                         <div class="d-flex justify-content-start">
-                                            <label for="{{ form.categories_str_for_label }}" class="form-control-label">{{ form.categories_str.label }}</label>
+                                            <label for="{{ form.categories_str_for_label }}" class="form-control-label">Categories</label>
                                         </div>
                                         {% if form.categories_str.errors %}
                                             <div class="">{{ form.categories_str|add_class:"form-control form-control-sm is-invalid" }}</div>

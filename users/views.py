@@ -3,6 +3,7 @@ from .models import User
 from django.contrib import messages
 from django.contrib.auth import logout
 from review.models import Review
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
 from content.models import Content, SavedContent, ModeratedContent
@@ -70,7 +71,7 @@ def dashboard(request):
     if request.user.role == 'MODERATOR':
         moderated = ModeratedContent.objects.filter(moderator=request.user).order_by('-content').first()
         for c in Content.objects.all():
-            if c.approved != 'Approved':
+            if c.approved == 'Pending':
                 t_count += 1
         if t_count > 0:
             tasks.append(f'You have {t_count} contents to moderate')
@@ -226,3 +227,51 @@ def update_user(request, username):
     }
     return render(request, 'users/update_user.html', context=context)
 
+@login_required
+def user_info(request, username):
+    user = User.objects.filter(username=username).first()
+
+    if not user:
+        messages.warning(request, 'User not found')
+        return redirect('dashboard')
+    
+    if user.role == 'CONTRIBUTOR':
+        content = Content.objects.filter(user=user).order_by('-created_at')
+        paginator = Paginator(content, 1)
+        if request.GET.get('page'):
+            page_number = request.GET.get('page')
+        else:
+            page_number = 1
+        page_obj = paginator.get_page(page_number)
+        next_page = page_obj.next_page_number() if page_obj.has_next() else None
+        previous_page = page_obj.previous_page_number() if page_obj.has_previous() else None
+    else:
+        page_obj = None
+        page_number = 0
+        next_page = None
+        previous_page = None
+
+    if request.user.role == 'STUDENT':
+        profile = StudentProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'CONTRIBUTOR':
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
+
+    if user.role == 'STUDENT':
+        u_profile = StudentProfile.objects.filter(user=user).first()
+    elif user.role == 'CONTRIBUTOR':
+        u_profile = ContributorProfile.objects.filter(user=user).first()
+    elif user.role == 'MODERATOR':
+        u_profile = ModeratorProfile.objects.filter(user=user).first()
+
+    context = {
+        'u_user': user,
+        'u_profile': u_profile,
+        'profile': profile,
+        'page_obj': page_obj,
+        'page_number': page_number,
+        'next_page': next_page,
+        'previous_page': previous_page
+    }
+    return render(request, 'users/user_info.html', context=context)

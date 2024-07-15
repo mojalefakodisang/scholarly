@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from student.models import StudentProfile, Student
 from contributor.models import ContributorProfile
 from content.models import Content
+from moderator.models import ModeratorProfile
 
 
 @login_required
@@ -47,15 +48,33 @@ def view_review(request, review_id, content_id):
     if review is None:
         messages.warning(request, 'Review not found. Now redirecting to the content')
         return redirect('content-view', content_id=content_id)
+
+    if review.student != request.user:
+        messages.warning(request, 'Unauthorized action: Cannot update this review')
+        return redirect('content-view', content_id=content_id)
+
+    if request.method == 'POST':
+        form = UpdateReview(request.POST)
+        if form.is_valid():
+            review.review_content = form.cleaned_data['review_content']
+            review.rating = form.cleaned_data['rating']
+            review.save()
+            messages.success(request, 'Review updated successfully')
+            return redirect('content-view', content_id=content_id)
+    else:
+        form = UpdateReview(instance=review)
     
     if request.user.role == 'STUDENT':
-        profile = StudentProfile()
+        profile = StudentProfile.objects.filter(user=request.user).first()
     elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile()
+        profile = ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     context = {
         'profile': profile,
-        'review': review
+        'review': review,
+        'form': form
     }
 
     return render(request, 'review/view_review.html', context=context)

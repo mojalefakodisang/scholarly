@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 border-bottom mb-5" style="padding-top: 50px; margin-top: 80px;padding-bottom: 30px;">
-            <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+            <div style="padding-bottom: 0px;border-bottom-style: none;">
                 <div class="col-12 mb-5">
                     {% if messages %}
                         {% for message in messages %}
@@ -55,7 +55,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-2 d-flex align-items-center">
-                                                <a href="#" class="btn btn-sm btn-outline-dark">View</a>
+                                                <a href="{% url 'user-info' username=content.user.username %}" class="btn btn-sm btn-outline-dark">View</a>
                                             </div>
                                         </div>
                                     </div>

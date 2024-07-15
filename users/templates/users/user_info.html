@@ -1,0 +1,153 @@
+{% extends 'users/main.html' %}
+{% load form_tags %}
+{% block title %}
+    {% if title %}
+        <title>{{ title }} | {{ user }}</title>
+    {% else %}
+        <title>Scholarly | User Update</title>
+    {% endif %}
+{% endblock title %}
+{% block main %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
+            <div style="padding-bottom: 0px;border-bottom-style: none;border-bottom-color: var(--bs-secondary-color);">
+                <div class="col-lg-12 col-md-12 col-sm-12 container main">
+                    <div class="row mb-5">
+                        <div class="col-12 mb-2">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="mt-2 mb-2 alert alert-{{ message.tags }}">
+                                        <small>{{ message }}</small>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-10">
+                                <h1>User</h1>
+                            </div>
+                            <div class="col-2">
+                                {% if user.role == 'STUDENT' %}
+                                    <h4 class="badge bg-primary text-light p-2">Student</h4>
+                                {% elif user.role == 'CONTRIBUTOR' %}
+                                    <h4 class="badge bg-dark text-light p-2">Contributor</h4>
+                                {% elif user.role == 'MODERATOR' %}
+                                    <h4 class="badge bg-dark text-light p-2">Moderator</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if u_user.role == 'CONTRIBUTOR' %}
+                        <div class="row mb-5 d-flex justify-content-center">
+                            <div class="col-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">User information</h5>
+                                        <div class="row pb-3">
+                                            <div class="col-12 mb-3">
+                                                <h6><small class="badge bg-dark">Contributor</small></h6>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="">
+                                                    <img src="{{ u_profile.image.url }}" alt="" width="100px" height="100px" class="update-image border rounded-circle">
+                                                </div>
+                                            </div>
+                                            <div class="col-8">
+                                                {% if u_user.first_name == '' %}
+                                                    <h3>{{ u_user.username }}</h3>
+                                                    <small class="text-muted">{{ u_user.email }}</small>
+                                                {% else %}
+                                                    <h3>{{ u_user.first_name }} {{ u_user.last_name }}</h3>
+                                                    <h3>{{ u_user.username }}</h3>
+                                                    <small class="text-muted">{{ u_user.email }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Content</h5>
+                                        <div class="row d-flex justify-content-center pt-3">
+                                            {% if previous_page %}
+                                                <div class="col-1 mb-3 d-flex justify-content-center align-items-center">
+                                                    <a href="?page={{ previous_page }}" class="text-dark">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-1 mb-3"></div>
+                                            {% endif %}
+                                            <div class="card mb-3 col-10">
+                                                <div class="card-body">
+                                                    {% for p in page_obj %}
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <h4>{{ p.title }}</h4>
+                                                                <h6 class="text-muted">{{ p.description }}</h6>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <a href="{% url 'content-view' content_id=p.id %}" class="btn btn-primary">Read Article</a>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            {% if next_page %}
+                                                <div class="col-1 mb-3 d-flex justify-content-center align-items-center">
+                                                    <a href="?page={{ next_page }}" class="text-dark">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            {% else %}
+                                                <div class="col-1 mb-3"></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row mb-5 d-flex justify-content-center">
+                            <div class="col-10">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">User information</h5>
+                                        <div class="row pb-3">
+                                            <div class="col-12 mb-3">
+                                                <h6><small class="badge bg-dark">{{ u_user.role }}</small></h6>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="">
+                                                    <img src="{{ u_profile.image.url }}" alt="" width="100px" height="100px" class="update-image border rounded-circle">
+                                                </div>
+                                            </div>
+                                            <div class="col-8">
+                                                {% if u_user.first_name == '' %}
+                                                    <h3>{{ u_user.username }}</h3>
+                                                    <small class="text-muted">{{ u_user.email }}</small>
+                                                {% else %}
+                                                    <h3>{{ u_user.first_name }} {{ u_user.last_name }}</h3>
+                                                    <h3>{{ u_user.username }}</h3>
+                                                    <small class="text-muted">{{ u_user.email }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

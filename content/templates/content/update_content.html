@@ -1,10 +1,10 @@
 {% extends 'users/main.html' %}
 {% load form_tags %}
 {% block main %}
-    <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main">
+    <div class="col-lg-11 col-md-12 col-sm-12 container p-5 main" style="padding-top: 30px;margin-top: 71px;padding-bottom: 10px;">
         <div class="row mb-5">
             <div class="col-10">
-                <h4>Create a new content</h4>
+                <h4 class="text-light">Create a new content</h4>
             </div>
             <div class="col-2">
                 {% if user.role == 'CONTRIBUTOR' %}
@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
                                         <div class="d-flex justify-content-start">
-                                            <label for="{{ form.categories_str_for_label }}" class="form-control-label">{{ form.categories_str.label }}</label>
+                                            <label for="{{ form.categories_str_for_label }}" class="form-control-label">Categories</label>
                                         </div>
                                         {% if form.categories_str.errors %}
                                             <div class="">{{ form.categories_str|add_class:"form-control form-control-sm is-invalid" }}</div>
