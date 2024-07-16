@@ -50,6 +50,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             if [ -d "scholarly" ]; then
+              sudo systemctl stop scholarly.service
               cp -r scholarly/media .
               rm -rf scholarly
               git clone https://github.com/mojalefakodisang/scholarly
