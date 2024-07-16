@@ -4,18 +4,24 @@
 }
 
 .navbar {
-    background: linear-gradient(
-        180deg,
-        white 50%,
-        transparent 80%
-    );
+    background-color: white;
 }
     
-h1 {
+h1, h2, h3, h4, h5, h6 {
     color: var(--bg-secondary);
     font-weight: 600;
 }
 
 body {
-    background-color: blue;
+    background-color: var(--bg-primary);
+}
+
+main {
+    min-height: calc(100vh - 60px);
+    padding-bottom: 60px;
+}
+
+.bs-icon-primary, .btn-primary, .bg-primary {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--bg-secondary) !important;
 }
