@@ -6,94 +6,79 @@ on:
       - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      
-      - name: Set up environment
-        run: echo "Environment variables set"
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-
-      - name: Run tests
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-        run: |
-          python manage.py test
-
-      - name: Deploy to web_server_01
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.VM_HOST_1 }}
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            if [ -d "scholarly" ]; then
-              sudo systemctl stop scholarly.service
-              cp -r scholarly/media .
-              rm -rf scholarly
-              git clone https://github.com/mojalefakodisang/scholarly
-              rm -rf scholarly/media
-              mv ./media scholarly
-              cd scholarly
-              sudo apt-get install -y python3.8-venv
-              python3 -m venv venv
-              source venv/bin/activate
+    test:
+        runs-on: ubuntu-latest
+        services:
+          mysql:
+            image: mysql:5.7
+            env:
+              MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+              MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+              MYSQL_USER: ${{ secrets.DB_USER }}
+              MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            ports:
+              - 3306:3306
+    
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+    
+          - name: Install dependencies
+            run: |
+              python -m pip install --upgrade pip
               pip install -r requirements.txt
-              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
-              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
-              sudo systemctl restart scholarly.service
-            fi
+    
+          - name: Run tests
+            env:
+              DB_HOST: ${{ secrets.DB_HOST }}
+              DB_PORT: 3306
+              DB_NAME: ${{ secrets.DB_NAME }}
+              DB_USER: ${{ secrets.DB_USER }}
+              DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            run: |
+              python manage.py test
 
-#      - name: Deploy to web_server_02
-#        uses: appleboy/ssh-action@v0.1.6
-#        with:
-#          host: ${{ secrets.VM_HOST_2 }}
-#          username: ubuntu
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          script: |
-#            if [ -d "scholarly" ]; then
-#              cd scholarly
-#              git pull origin main
-#              git pull --all
-#              sudo apt-get install -y python3.8-venv
-#              python3 -m venv venv
-#              source venv/bin/activate
-#              pip install -r requirements.txt
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage collectstatic --no-input
-#              sudo systemctl restart scholarly.service
-#            else
-#              git clone https://github.com/mojalefakodisang/scholarly
-#              cd scholarly
-#              sudo apt-get install -y python3.8-venv
-#              python3 -m venv venv
-#              source venv/bin/activate
-#              pip install -r requirements.txt
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
-#              DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=${{ secrets.DB_HOST }} DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage collectstatic --no-input
-#              sudo systemctl restart scholarly.service
-#            fi
+    deploy:
+        runs-on: ubuntu-latest
+        
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+        
+          - name: Set up Python
+            uses: actions/setup-python@v2
+            with:
+              python-version: '3.8'
+            
+          - name: Set up environment
+            run: echo "Environment variables set"
+            env:
+              DB_NAME: ${{ secrets.DB_NAME }}
+              DB_USER: ${{ secrets.DB_USER }}
+              DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+              DB_HOST: ${{ secrets.DB_HOST }}
+              DB_PORT: ${{ secrets.DB_PORT }}
+            
+          - name: Deploy to web_server_01
+            uses: appleboy/ssh-action@v0.1.6
+            with:
+              host: ${{ secrets.VM_HOST_1 }}
+              username: ubuntu
+              key: ${{ secrets.SSH_PRIVATE_KEY }}
+              script: |
+                if [ -d "scholarly" ]; then
+                  sudo systemctl stop scholarly.service
+                  cp -r scholarly/media .
+                  rm -rf scholarly
+                  git clone https://github.com/mojalefakodisang/scholarly
+                  rm -rf scholarly/media
+                  mv ./media scholarly
+                  cd scholarly
+                  sudo apt-get install -y python3.8-venv
+                  python3 -m venv venv
+                  source venv/bin/activate
+                  pip install -r requirements.txt
+                  DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage makemigrations
+                  DB_NAME=${{ secrets.DB_NAME }} DB_USER=${{ secrets.DB_USER }} DB_HOST=localhost DB_PORT=${{ secrets.DB_PORT }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} python3 -m manage migrate
+                  sudo systemctl restart scholarly.service
+                fi
