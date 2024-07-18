@@ -36,7 +36,9 @@ jobs:
               DB_USER: ${{ secrets.DB_USER }}
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             run: |
-              python manage.py test
+                sudo /etc/init.d/mysql start
+                mysql -e 'CREATE DATABASE ${DB_DATABASE};' -uroot -hlocalhost
+                python manage.py test
 
     deploy:
         runs-on: ubuntu-latest
