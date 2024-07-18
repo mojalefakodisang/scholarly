@@ -1,3 +1,4 @@
+"""Views module for content model"""
 from review.models import Review
 from django.contrib import messages
 from student.models import StudentProfile
@@ -11,14 +12,35 @@ from review.forms import CreateReview, UpdateReview
 from users.models import User
 
 
+def get_profile(request):
+    """Gets the profile of the logged in user"""
+    if request.user.role == 'STUDENT':
+        return StudentProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'CONTRIBUTOR':
+        return ContributorProfile.objects.filter(user=request.user).first()
+    elif request.user.role == 'MODERATOR':
+        return ModeratorProfile.objects.filter(user=request.user).first()
+
+
 @login_required
 def create_content(request):
+    """Create content view function
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        HttpResponse object
+    """
     if request.user.role == 'CONTRIBUTOR':
         profile = ContributorProfile.objects.filter(user=request.user).first()
     else:
-        messages.warning(request, 'Unauthorized action. Must be an Admin or Contributor')
+        messages.warning(
+            request,
+            'Unauthorized action. Must be an Admin or Contributor'
+        )
         return redirect('dashboard')
-    
+
     if request.method == 'POST':
         form = CreateContent(request.POST)
         if form.is_valid():
@@ -47,6 +69,14 @@ def create_content(request):
 
 @login_required
 def explore(request):
+    """Explore view function
+
+    Args:
+        request: HttpRequest object
+
+    Returns:
+        HttpResponse object
+    """
     contents = Content.objects.all()
     contributors = ContributorProfile.objects.all()
 
@@ -58,12 +88,7 @@ def explore(request):
     if len(contents) == 0:
         contents = None
 
-    if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     student_content = []
     if contents is None:
@@ -87,24 +112,31 @@ def explore(request):
 
     return render(request, 'content/explore.html', context=context)
 
+
 @login_required
 def content_view(request, content_id):
+    """Content view function
+
+    Args:
+        request: HttpRequest object
+        content_id: int
+
+    Returns:
+        HttpResponse object
+    """
     content = Content.objects.filter(id=content_id).first()
     contributors = ContributorProfile.objects.all()
     reviews = Review.objects.filter(content=content).all()
-    saved = SavedContent.objects.filter(content=content_id, student=request.user).first()
+    saved = SavedContent.objects.filter(
+        content=content_id,
+        student=request.user).first()
     categories = content.categories.all()
 
     if content is None:
         messages.warning(request, 'Content not found')
         return redirect('explore')
 
-    if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     if len(reviews) == 0:
         reviews = None
@@ -142,8 +174,18 @@ def content_view(request, content_id):
 
     return render(request, 'content/content_view.html', context=context)
 
+
 @login_required
 def content_update(request, content_id):
+    """Content update view function
+
+    Args:
+        request: HttpRequest object
+        content_id: int
+
+    Returns:
+        HttpResponse object
+    """
     content = Content.objects.filter(id=content_id).first()
     contr = ContributorProfile.objects.filter(user=request.user).first()
 
@@ -174,8 +216,18 @@ def content_update(request, content_id):
     }
     return render(request, 'content/update_content.html', context=context)
 
+
 @login_required
 def content_delete(request, content_id):
+    """Content delete view function
+
+    Args:
+        request: HttpRequest object
+        content_id: int
+
+    Returns:
+        HttpResponse object
+    """
     content = Content.objects.filter(id=content_id).first()
     contr = ContributorProfile.objects.filter(user=request.user).first()
 
@@ -187,20 +239,39 @@ def content_delete(request, content_id):
     messages.success(request, 'Content deleted successfully')
     return redirect('dashboard')
 
+
 @login_required
 def save_content(request, content_id):
-    existing = SavedContent.objects.filter(content=content_id, student=request.user).first()
+    """Content save view function
+
+    Args:
+        request: HttpRequest object
+        content_id: int
+
+    Returns:
+        HttpResponse object
+    """
+    existing = SavedContent.objects.filter(
+        content=content_id,
+        student=request.user).first()
 
     if existing:
-        return redirect('content-unsave', content_id=content_id, saved_id=existing.id)
-    
+        return redirect(
+            'content-unsave',
+            content_id=content_id,
+            saved_id=existing.id
+        )
+
     content = Content.objects.get(id=content_id)
 
     if not content:
         messages.warning(request, 'Content not found')
 
     if request.user.role != 'STUDENT':
-        messages.warning(request, 'Unauthorized action: Only Students can save contents')
+        messages.warning(
+            request,
+            'Unauthorized action: Only Students can save contents'
+        )
         return redirect('explore')
 
     saved_content = SavedContent(content=content, student=request.user)
@@ -208,8 +279,19 @@ def save_content(request, content_id):
     messages.success(request, 'Content successfully saved')
     return redirect('explore')
 
+
 @login_required
 def unsave_content(request, content_id, saved_id):
+    """Content unsave view function
+
+    Args:
+        request: HttpRequest object
+        content_id: int
+        saved_id: int
+
+    Returns:
+        HttpResponse object
+    """
     existing = SavedContent.objects.filter(id=saved_id).first()
 
     if existing is None:
@@ -219,8 +301,18 @@ def unsave_content(request, content_id, saved_id):
     messages.success(request, 'Content unsaved successfully')
     return redirect('explore')
 
+
 @login_required
 def contributor_content(request, username):
+    """Contributor content view function
+
+    Args:
+        request: HttpRequest object
+        username: str
+
+    Returns:
+        HttpResponse object
+    """
     user = User.objects.filter(username=username).first()
     contents = Content.objects.filter(user=user).all()
 
