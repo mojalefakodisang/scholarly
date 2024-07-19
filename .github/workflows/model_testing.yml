@@ -30,14 +30,14 @@ jobs:
     
           - name: Run tests
             env:
-              DB_HOST: ${{ secrets.DB_HOST }}
+              DB_HOST: localhost
               DB_PORT: 3306
               DB_NAME: ${{ secrets.DB_NAME }}
               DB_USER: root
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             run: |
                 sudo /etc/init.d/mysql start
-                sudo mysql -e 'CREATE DATABASE ${{secrets.DB_NAME}};' -uroot -p${{secrets.DB_PASSWORD}}
+                sudo mysql -e 'CREATE DATABASE ${{secrets.DB_NAME}};' -uroot -hlocalhost -p${{secrets.DB_PASSWORD}}
                 python manage.py test
 
     deploy:
