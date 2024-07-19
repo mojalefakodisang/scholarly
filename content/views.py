@@ -10,16 +10,7 @@ from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
 from review.forms import CreateReview, UpdateReview
 from users.models import User
-
-
-def get_profile(request):
-    """Gets the profile of the logged in user"""
-    if request.user.role == 'STUDENT':
-        return StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
-        return ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        return ModeratorProfile.objects.filter(user=request.user).first()
+from users.utils import get_profile
 
 
 @login_required

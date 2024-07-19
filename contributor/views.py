@@ -1,3 +1,5 @@
+"""Views for the contributor app
+"""
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from .models import Contributor
@@ -6,6 +8,15 @@ from users.models import User
 
 
 def register(request):
+    """View for registering a new Contributor user
+
+    Args:
+        request (HttpRequest): HttpRequest object
+
+    Returns:
+        HttpResponse: HttpResponse object
+    """
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -21,15 +32,21 @@ def register(request):
                 messages.warning(request, 'Username is already taken')
                 return redirect('contr-register')
             if password1 != password2:
-                messages.warning(request, 'Passwords does not match, please try again')
+                messages.warning(
+                    request,
+                    'Passwords does not match, please try again'
+                )
                 return redirect('contr-register')
-            
+
             Contributor.objects.create_user(
                 username=username,
                 email=email,
                 password=password1
             )
-            messages.success(request, 'Student registered successfully. You can now login')
+            messages.success(
+                request,
+                'Student registered successfully. You can now login'
+            )
             return redirect('login')
     else:
         form = RegisterForm()

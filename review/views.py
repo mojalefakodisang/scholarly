@@ -7,7 +7,7 @@ from student.models import StudentProfile, Student
 from contributor.models import ContributorProfile
 from content.models import Content
 from moderator.models import ModeratorProfile
-
+from users.utils import get_profile
 
 @login_required
 def create_review(request, content_id):
@@ -64,12 +64,7 @@ def view_review(request, review_id, content_id):
     else:
         form = UpdateReview(instance=review)
     
-    if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     context = {
         'profile': profile,

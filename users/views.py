@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.views import LogoutView
 from content.models import Content, SavedContent, ModeratedContent
 from django.core.exceptions import ValidationError
-from .utils import send_email, generate_reset_token
+from .utils import send_email, generate_reset_token, get_profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import RequestResetForm, ResetPassword, LoginForm, UserUpdateForm
@@ -60,13 +60,9 @@ def dashboard(request):
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
 
-    if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
+    profile = get_profile(request)
+    if request.user.role == 'CONTRIBUTOR':
         create_notifications(request)
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
 
     if request.user.role == 'MODERATOR':
         moderated = ModeratedContent.objects.filter(moderator=request.user).order_by('-content').first()
@@ -251,12 +247,7 @@ def user_info(request, username):
         next_page = None
         previous_page = None
 
-    if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     if user.role == 'STUDENT':
         u_profile = StudentProfile.objects.filter(user=user).first()

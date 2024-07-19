@@ -1,3 +1,5 @@
+"""Module for contributor models
+"""
 from PIL import Image
 from django.db import models
 from users.models import User
@@ -7,12 +9,29 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class ContributorManager(BaseUserManager):
+    """Manages contributor queries
+
+    Args:
+        BaseUserManager (class): Django base user manager
+
+    Returns:
+        manager: Contributor manager
+    """
     def get_queryset(self, *args, **kwargs):
+        """Returns a queryset of contributors"""
         results = super().get_queryset(*args, **kwargs)
         return results.filter(role=User.Role.CONTRIBUTOR)
 
 
 class Contributor(User):
+    """Model for a Contributor user
+
+    Args:
+        User (class): User model
+
+    Returns:
+        model: Contributor user model
+    """
 
     base_role = User.Role.CONTRIBUTOR
 
@@ -23,14 +42,24 @@ class Contributor(User):
 
 
 class ContributorProfile(models.Model):
+    """Model for a Contributor's profile
+
+    Args:
+        models (module): Django models module
+
+    Returns:
+        model: Contributor profile model
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contributor_id = models.IntegerField(null=True, blank=True)
     image = models.ImageField(default='default.jpg', upload_to='contr_pics')
 
     def __str__(self):
+        """Returns a string representation of the ContributorProfile"""
         return f'{self.user.username} Profile'
 
     def save(self, *args, **kwargs):
+        """Saves the ContributorProfile instance"""
         super().save(*args, **kwargs)
 
         img = Image.open(self.image.path)
@@ -42,6 +71,7 @@ class ContributorProfile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """Creates or updates a ContributorProfile instance"""
     if created and instance.role == User.Role.CONTRIBUTOR:
         ContributorProfile.objects.create(user=instance)
     else:

@@ -7,18 +7,13 @@ from django.contrib import messages
 from student.models import StudentProfile
 from contributor.models import ContributorProfile
 from moderator.models import ModeratorProfile
-
+from users.utils import get_profile
 
 @login_required
 def get_notifications(request):
     notifications = Notifications.objects.filter(user=request.user).order_by('-created_at').all()
 
-    if request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    else:
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     context = {
         'profile': profile,
@@ -68,12 +63,7 @@ def create_notifications(request):
 def notification_view(request, notif_id):
     notification = Notifications.objects.filter(id=notif_id, user=request.user).first()
 
-    if request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
-    elif request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
-    else:
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
+    profile = get_profile(request)
 
     notification.read = True
     notification.save()
