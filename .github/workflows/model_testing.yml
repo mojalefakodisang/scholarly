@@ -33,11 +33,11 @@ jobs:
               DB_HOST: ${{ secrets.DB_HOST }}
               DB_PORT: 3306
               DB_NAME: ${{ secrets.DB_NAME }}
-              DB_USER: ${{ secrets.DB_USER }}
+              DB_USER: root
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             run: |
                 sudo /etc/init.d/mysql start
-                mysql -e 'CREATE DATABASE ${{secrets.DB_NAME}};' -u${{secrets.DB_USER}} -h${{secrets.DB_HOST}} -p${{secrets.DB_PASSWORD}}
+                sudo mysql -e 'CREATE DATABASE ${{secrets.DB_NAME}};' -uroot -p${{secrets.DB_PASSWORD}}
                 python manage.py test
 
     deploy:
