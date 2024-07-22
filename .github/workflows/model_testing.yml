@@ -32,7 +32,7 @@ jobs:
           - name: Start MySQL and initialize database
             run: |
               sudo service mysql start
-              mysql -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
+              mysql -u root -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
 
           - name: Run tests
             env:
@@ -42,8 +42,6 @@ jobs:
               DB_USER: root
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             run: |
-                sudo /etc/init.d/mysql start
-                mysql -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
                 python manage.py test
 
     deploy:
