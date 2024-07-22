@@ -3,20 +3,19 @@ from .models import Review
 from .forms import CreateReview, UpdateReview
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from student.models import StudentProfile, Student
-from contributor.models import ContributorProfile
+from student.models import StudentProfile
 from content.models import Content
-from moderator.models import ModeratorProfile
 from users.utils import get_profile
+from main.utils import *
 
 @login_required
 def create_review(request, content_id):
     if request.user.role == 'STUDENT':
-        profile = StudentProfile()
+        profile = get_profile(request)
     else:
         messages.warning(request, 'Unauthorized action: Only students can review articles')
 
-    content = Content.objects.get(id=content_id)
+    content = obj_by_subj(Content, 'first', id=content_id)
     
     if request.method == 'POST':
         form = CreateReview(request.POST)
@@ -43,7 +42,7 @@ def create_review(request, content_id):
 
 @login_required
 def view_review(request, review_id, content_id):
-    review = Review.objects.get(id=review_id)
+    review = obj_by_subj(Review, 'first', id=review_id)
 
     if review is None:
         messages.warning(request, 'Review not found. Now redirecting to the content')
@@ -76,7 +75,7 @@ def view_review(request, review_id, content_id):
 
 @login_required
 def delete_review(request, review_id, content_id):
-    review = Review.objects.get(id=review_id)
+    review = obj_by_subj(Review, 'first', id=review_id)
 
     if review is None:
         messages.warning(request, 'Review not found')
@@ -92,8 +91,8 @@ def delete_review(request, review_id, content_id):
 
 @login_required
 def update_review(request, review_id, content_id):
-    review = Review.objects.get(id=review_id)
-    profile = StudentProfile()
+    review = obj_by_subj(Review, 'first', id=review_id)
+    profile = get_profile(request)
 
     if review is None:
         messages.warning(request, 'Review not found')

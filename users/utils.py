@@ -25,7 +25,7 @@ def generate_reset_token(user):
     return token_generator.make_token(user)
 
 
-def get_profile(request):
+def get_profile(request, **kwargs):
     """Gets the profile of the logged in user"""
     if request.user.role == 'STUDENT':
         return StudentProfile.objects.filter(user=request.user).first()

@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from users.models import User as u_User
 from content.models import Content, ModeratedContent
 from django.contrib.auth.decorators import login_required
+from main.utils import *
 
 
 def register(request):
@@ -30,10 +31,10 @@ def register(request):
             password1 = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
 
-            if u_User.objects.filter(email=email).exists():
+            if obj_by_subj(u_User, 'first', email=email).exists():
                 messages.warning(request, 'Email is already taken')
                 return redirect('mod-register')
-            if u_User.objects.filter(username=username).exists():
+            if obj_by_subj(u_User, 'first', username=username).exists():
                 messages.warning(request, 'Username is already taken')
                 return redirect('mod-register')
             if password1 != password2:
@@ -85,7 +86,7 @@ def validate(request):
     """View for validating a Moderator user account"""
     token = request.GET.get('token')
     try:
-        profile = ModeratorProfile.objects.get(token=token)
+        profile = obj_by_subj(ModeratorProfile, 'first', token=token)
         user = profile.user
         user.is_active = True
         user.save()
@@ -109,7 +110,7 @@ def approve_content(request, content_id):
     Returns:
         HttpResponse: HttpResponse object
     """
-    content = Content.objects.get(id=content_id)
+    content = obj_by_subj(Content, 'first', id=content_id)
 
     if content is None:
         messages.warning(request, 'Content not found. Please try again')
@@ -138,8 +139,8 @@ def disapprove_content(request, content_id):
     Returns:
         HttpResponse: HttpResponse object
     """
-    content = Content.objects.get(id=content_id)
-    mod = ModeratedContent.objects.filter(content=content).all()
+    content = obj_by_subj(Content, 'first', id=content_id)
+    mod = obj_by_subj(ModeratedContent, 'first', content=content)
 
     if content is None:
         messages.warning(request, 'Content not found. Please try again')

@@ -18,6 +18,7 @@ jobs:
               MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
             ports:
               - 3306:3306
+            options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
         steps:
           - name: Checkout code
@@ -27,17 +28,22 @@ jobs:
             run: |
               python -m pip install --upgrade pip
               pip install -r requirements.txt
-    
+
+          - name: Start MySQL and initialize database
+            run: |
+              sudo service mysql start
+              mysql -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
+
           - name: Run tests
             env:
-              DB_HOST: localhost
+              DB_HOST: 127.0.0.1
               DB_PORT: 3306
               DB_NAME: ${{ secrets.DB_NAME }}
               DB_USER: root
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             run: |
                 sudo /etc/init.d/mysql start
-                sudo mysql -e 'CREATE DATABASE ${{secrets.DB_NAME}};' -uroot -hlocalhost -p${{secrets.DB_PASSWORD}}
+                mysql -e "CREATE DATABASE IF NOT EXISTS \`${{ secrets.DB_NAME }}\`;"
                 python manage.py test
 
     deploy:

@@ -1,16 +1,15 @@
 """Views module for content model"""
 from review.models import Review
 from django.contrib import messages
-from student.models import StudentProfile
 from .models import Content, SavedContent
 from django.shortcuts import render, redirect
 from .forms import CreateContent, UpdateContent
 from django.contrib.auth.decorators import login_required
 from contributor.models import ContributorProfile
-from moderator.models import ModeratorProfile
-from review.forms import CreateReview, UpdateReview
+from review.forms import CreateReview
 from users.models import User
 from users.utils import get_profile
+from main.utils import *
 
 
 @login_required
@@ -24,7 +23,7 @@ def create_content(request):
         HttpResponse object
     """
     if request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
+        profile = get_profile(request)
     else:
         messages.warning(
             request,
@@ -40,10 +39,13 @@ def create_content(request):
             content = form.cleaned_data['content']
             categories = form.cleaned_data['categories_str']
 
-            cont = Content(user=request.user, categories_str=categories,
-                           title=title,
-                           description=description,
-                           content=content)
+            cont = Content(
+                user=request.user,
+                categories_str=categories,
+                title=title,
+                description=description,
+                content=content
+            )
             cont.save()
             messages.success(request, 'Content added sucessfully')
             return redirect('dashboard')
@@ -68,11 +70,11 @@ def explore(request):
     Returns:
         HttpResponse object
     """
-    contents = Content.objects.all()
-    contributors = ContributorProfile.objects.all()
+    contents = obj_all(Content)
+    contributors = obj_all(ContributorProfile)
 
     if request.user.role == 'STUDENT':
-        saved = SavedContent.objects.filter(student=request.user).first()
+        saved = obj_by_subj(SavedContent, 'all', student=request.user)
     else:
         saved = None
 
@@ -115,12 +117,15 @@ def content_view(request, content_id):
     Returns:
         HttpResponse object
     """
-    content = Content.objects.filter(id=content_id).first()
-    contributors = ContributorProfile.objects.all()
-    reviews = Review.objects.filter(content=content).all()
-    saved = SavedContent.objects.filter(
+    content = obj_by_subj(Content, 'first', id=content_id)
+    contributors = obj_all(ContributorProfile)
+    reviews = obj_by_subj(Review, 'all', content=content_id)
+    saved = obj_by_subj(
+        SavedContent,
+        'first',
         content=content_id,
-        student=request.user).first()
+        student=request.user
+    )
     categories = content.categories.all()
 
     if content is None:
@@ -141,7 +146,8 @@ def content_view(request, content_id):
                 student=request.user,
                 content=content,
                 review_content=rev,
-                rating=rating)
+                rating=rating
+            )
 
             review.save()
             messages.success(request, 'Review posted successfully')
@@ -177,8 +183,8 @@ def content_update(request, content_id):
     Returns:
         HttpResponse object
     """
-    content = Content.objects.filter(id=content_id).first()
-    contr = ContributorProfile.objects.filter(user=request.user).first()
+    content = obj_by_subj(Content, 'first', id=content_id)
+    contr = obj_by_subj(ContributorProfile, 'first', user=request.user)
 
     profile = contr
 
@@ -219,8 +225,8 @@ def content_delete(request, content_id):
     Returns:
         HttpResponse object
     """
-    content = Content.objects.filter(id=content_id).first()
-    contr = ContributorProfile.objects.filter(user=request.user).first()
+    content = obj_by_subj(Content, 'first', id=content_id)
+    contr = obj_by_subj(ContributorProfile, 'first', user=request.user)
 
     if content.user != contr.user:
         messages.warning(request, 'Unauthorized: Cannot delete this post')
@@ -242,9 +248,12 @@ def save_content(request, content_id):
     Returns:
         HttpResponse object
     """
-    existing = SavedContent.objects.filter(
+    existing = obj_by_subj(
+        SavedContent,
+        'first',
         content=content_id,
-        student=request.user).first()
+        student=request.user
+    )
 
     if existing:
         return redirect(
@@ -253,7 +262,7 @@ def save_content(request, content_id):
             saved_id=existing.id
         )
 
-    content = Content.objects.get(id=content_id)
+    content = obj_by_subj(Content, 'first', id=content_id)
 
     if not content:
         messages.warning(request, 'Content not found')
@@ -283,7 +292,7 @@ def unsave_content(request, content_id, saved_id):
     Returns:
         HttpResponse object
     """
-    existing = SavedContent.objects.filter(id=saved_id).first()
+    existing = obj_by_subj(SavedContent, 'first', id=saved_id)
 
     if existing is None:
         return redirect('save-content', content_id=content_id)
@@ -304,10 +313,10 @@ def contributor_content(request, username):
     Returns:
         HttpResponse object
     """
-    user = User.objects.filter(username=username).first()
-    contents = Content.objects.filter(user=user).all()
+    user = obj_by_subj(User, 'first', username=username)
+    contents = obj_by_subj(Content, 'all', user=user)
 
-    profile = ContributorProfile.objects.filter(user=request.user).first()
+    profile = obj_by_subj(ContributorProfile, 'first', user=user)
 
     context = {
         'profile': profile,

@@ -5,6 +5,7 @@ from .forms import RegisterForm
 from .models import Contributor
 from django.contrib import messages
 from users.models import User
+from main.utils import *
 
 
 def register(request):
@@ -25,10 +26,10 @@ def register(request):
             password1 = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
 
-            if User.objects.filter(email=email).exists():
+            if obj_by_subj(User, 'first', email=email).exists():
                 messages.warning(request, 'Email is already taken')
                 return redirect('contr-register')
-            if User.objects.filter(username=username).exists():
+            if obj_by_subj(User, 'first', username=username).exists():
                 messages.warning(request, 'Username is already taken')
                 return redirect('contr-register')
             if password1 != password2:

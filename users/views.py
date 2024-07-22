@@ -20,7 +20,8 @@ from student.forms import UpdateImageForm as StudImageForm
 from moderator.forms import UpdateImageForm as ModImageForm
 from notifications.models import Notifications
 from notifications.views import create_notifications
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from users.utils import get_profile
+from main.utils import *
 
 
 def login_view(request):
@@ -50,13 +51,29 @@ def logout_user(request):
     logout(request)
     return redirect('login')
     
+
+def statistics(request):
+    l_content = obj_by_subj(Content, 'first -created_at', user=request.user)
+    no_reviews = len(obj_by_subj(Review, 'all', content=l_content))
+    bookmarks = len(obj_by_subj(SavedContent, 'all', content=l_content))
+    r_list = [r.rating for r in obj_by_subj(Review, 'all', content=l_content)]
+    avg_rating = sum(r_list) / len(r_list) if len(r_list) > 0 else 0
+
+    return {
+        'bookmarks': bookmarks,
+        'no_reviews': no_reviews,
+        'avg_rating': avg_rating,
+        'latest_content': l_content
+    }
+
+
 @login_required
 def dashboard(request):
     count = t_count = 0
     tasks = []
     notifications = []
     empty_ = ['', None]
-    contributor_profiles = ContributorProfile.objects.all()
+    contributor_profiles = obj_all(ContributorProfile)
     if request.user.first_name in empty_ or request.user.last_name in empty_:
         tasks.append('Update your profile')
 
@@ -65,7 +82,11 @@ def dashboard(request):
         create_notifications(request)
 
     if request.user.role == 'MODERATOR':
-        moderated = ModeratedContent.objects.filter(moderator=request.user).order_by('-content').first()
+        moderated = obj_by_subj(
+            ModeratedContent,
+            'first -content',
+            moderator=request.user
+        )
         for c in Content.objects.all():
             if c.approved == 'Pending':
                 t_count += 1
@@ -74,19 +95,26 @@ def dashboard(request):
     else:
         moderated = None
 
-    reviews = Review.objects.all()
-    review = Review.objects.filter(student=request.user).first()
+    reviews = obj_all(Review)
+    review = obj_by_subj(Review, 'first', student=request.user)
     content = Content.objects.filter(user=request.user)
-    saved = SavedContent.objects.filter(student_id=request.user.id).order_by('-content').first()
+    saved = obj_by_subj(
+        SavedContent,
+        'first -content',
+        student_id=request.user.id
+    )
 
     """Statistics"""
-    l_content = Content.objects.filter(user=request.user).order_by('-created_at').first()
-    no_reviews = len(Review.objects.filter(content=l_content).all())
-    bookmarks = len(SavedContent.objects.filter(content=l_content).all())
-    r_list = [r.rating for r in Review.objects.filter(content=l_content).all()]
-    avg_rating = sum(r_list) / len(r_list) if len(r_list) > 0 else 0
+    l_content = statistics(request)['latest_content']
+    no_reviews = statistics(request)['no_reviews']
+    bookmarks = statistics(request)['bookmarks']
+    avg_rating = statistics(request)['avg_rating']
 
-    notifications = Notifications.objects.filter(user=request.user).order_by('-created_at').first()
+    notifications = obj_by_subj(
+        Notifications,
+        'first -created_at',
+        user=request.user
+    )
     if notifications and notifications.read == False:
         not_ = notifications.title
     else:
@@ -122,7 +150,7 @@ def request_reset(request):
     form = RequestResetForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
-        user = User.objects.filter(email=email).first()
+        user = obj_by_subj(User, 'first', email=email)
         if user:
             reset_token = generate_reset_token(user)
             subject = "Request to reset password | Scholarly"
@@ -151,7 +179,7 @@ def request_reset(request):
     return render(request, 'users/reset_request.html', context=context)
 
 def reset_password(request, username, token):
-    user = User.objects.filter(username=username).first()
+    user = obj_by_subj(User, 'first', username=username)
 
     if not user:
         messages.warning(request, 'Invalid username')
@@ -187,16 +215,14 @@ def reset_password(request, username, token):
 
 @login_required
 def update_user(request, username):
-    user = User.objects.get(username=username)
+    user = obj_by_subj(User, 'first', username=username)
+    profile = get_profile(request)
 
     if request.user.role == 'STUDENT':
-        profile = StudentProfile.objects.filter(user=request.user).first()
         image_form = StudImageForm
     elif request.user.role == 'CONTRIBUTOR':
-        profile = ContributorProfile.objects.filter(user=request.user).first()
         image_form = ContrImageForm
     elif request.user.role == 'MODERATOR':
-        profile = ModeratorProfile.objects.filter(user=request.user).first()
         image_form = ModImageForm
 
     if request.method == 'POST':
@@ -225,22 +251,24 @@ def update_user(request, username):
 
 @login_required
 def user_info(request, username):
-    user = User.objects.filter(username=username).first()
+    user = obj_by_subj(User, 'first', username=username)
 
     if not user:
         messages.warning(request, 'User not found')
         return redirect('dashboard')
     
     if user.role == 'CONTRIBUTOR':
-        content = Content.objects.filter(user=user).order_by('-created_at')
+        content = obj_by_subj(Content, 'first -created_at', user=user)
         paginator = Paginator(content, 1)
         if request.GET.get('page'):
             page_number = request.GET.get('page')
         else:
             page_number = 1
         page_obj = paginator.get_page(page_number)
-        next_page = page_obj.next_page_number() if page_obj.has_next() else None
-        previous_page = page_obj.previous_page_number() if page_obj.has_previous() else None
+        next_page = page_obj.next_page_number()\
+            if page_obj.has_next() else None
+        previous_page = page_obj.previous_page_number() \
+            if page_obj.has_previous() else None
     else:
         page_obj = None
         page_number = 0
@@ -249,12 +277,7 @@ def user_info(request, username):
 
     profile = get_profile(request)
 
-    if user.role == 'STUDENT':
-        u_profile = StudentProfile.objects.filter(user=user).first()
-    elif user.role == 'CONTRIBUTOR':
-        u_profile = ContributorProfile.objects.filter(user=user).first()
-    elif user.role == 'MODERATOR':
-        u_profile = ModeratorProfile.objects.filter(user=user).first()
+    u_profile = get_profile(request, user=user)
 
     context = {
         'u_user': user,

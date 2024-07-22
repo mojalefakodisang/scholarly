@@ -21,4 +21,31 @@ class Review(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
+        """
+        Returns a string representation of the Review object.
+
+        The string includes the username of the student who wrote the review
+        and the rating given for the review.
+
+        Returns:
+            str: A string representation of the Review object.
+        """
         return f"Review - ({self.student.username}) - Rating: {self.rating}"
+
+    def __doc__(self):
+        """
+        Returns the docstring for the Review class.
+
+        Returns:
+            str: The docstring for the Review class.
+        """
+        return """
+        The Review class represents a review given by a student for a content.
+
+        Attributes:
+            content (ForeignKey): The content for which the review is given.
+            student (ForeignKey): The student who wrote the review.
+            rating (IntegerField): The rating given for the review.
+            review_content (CharField): The content of the review.
+            created_at (DateTimeField): The timestamp when the review was created.
+        """
