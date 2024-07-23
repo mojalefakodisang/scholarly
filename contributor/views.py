@@ -26,10 +26,10 @@ def register(request):
             password1 = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
 
-            if obj_by_subj(User, 'first', email=email).exists():
+            if User.objects.filter(email=email).exists():
                 messages.warning(request, 'Email is already taken')
                 return redirect('contr-register')
-            if obj_by_subj(User, 'first', username=username).exists():
+            if User.objects.filter(username=username).exists():
                 messages.warning(request, 'Username is already taken')
                 return redirect('contr-register')
             if password1 != password2:
@@ -46,14 +46,14 @@ def register(request):
             )
             messages.success(
                 request,
-                'Student registered successfully. You can now login'
+                'Contributor registered successfully. You can now login'
             )
             return redirect('login')
     else:
         form = RegisterForm()
 
     context = {
-        'title': 'Scholarly | Student - Register',
+        'title': 'Scholarly | Contributor - Register',
         'form': form
     }
     return render(request, 'contributor/register.html', context=context)

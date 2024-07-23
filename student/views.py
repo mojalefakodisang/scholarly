@@ -28,10 +28,10 @@ def register(request):
             password1 = form.cleaned_data.get('password1')
             password2 = form.cleaned_data.get('password2')
 
-            if obj_by_subj(User, 'first', email=email).exists():
+            if User.objects.filter(email=email).exists():
                 messages.warning(request, 'Email is already taken')
                 return redirect('st-register')
-            if obj_by_subj(User, 'first', username=username).exists():
+            if User.objects.filter(username=username).exists():
                 messages.warning(request, 'Username is already taken')
                 return redirect('st-register')
             if password1 != password2:
