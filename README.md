@@ -2,15 +2,17 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+![GitHub Thumbnail](static/main/img/github_thumbnail.png)
+
 ## Introduction
 
 Scholarly is an educational resource blog web application developed with Django. It is a platform where students can explore and learn on various topics. Users can read on different topics, made by our commited contributors. The application is designed to be user-friendly and easy to navigate. It is a great tool for students and anyone who wants to learn something new.
 
 ### Author
-Mojalefa Kodisang (Full stack software developer)
-Deployed website: https://scholarlyonline.live/
-Blog post: https://www.linkedin.com/pulse/scholarly-educational-resource-blog-students-mojalefa-kodisang-5v7if/
-LinkedIn: https://www.linkedin.com/in/mojalefa-kodisang-9751b71b2/
+**Mojalefa Kodisang** (Full stack software developer) <br>
+Deployed website: https://scholarlyonline.live/ <br>
+Blog post: https://www.linkedin.com/pulse/scholarly-educational-resource-blog-students-mojalefa-kodisang-5v7if/ <br>
+LinkedIn: https://www.linkedin.com/in/mojalefa-kodisang-9751b71b2/ <br>
 
 
 ## Features
