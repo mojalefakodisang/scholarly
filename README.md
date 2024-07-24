@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 <section style="text-align: center">
-    ![GitHub Thumbnail](static/main/img/github_thumbnail.png)
+![GitHub Thumbnail](static/main/img/github_thumbnail.png)
 </section>
 
 ## Introduction
