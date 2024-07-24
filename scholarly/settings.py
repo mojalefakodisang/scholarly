@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "main",
     "users",
-    "tasks",
     "review",
     "content",
     "student",
